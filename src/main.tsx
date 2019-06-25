@@ -281,3 +281,5 @@ export function initCommentsApp(
         }
     });
 }
+
+export { default as APIClient }  from './api';
