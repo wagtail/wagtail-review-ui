@@ -1,0 +1,86 @@
+#comments .comment {
+    width: 100%;
+    display: block;
+    background: white;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
+
+    &__header-info,
+    &__header-resolved {
+        display: inline-block;
+    }
+
+    &__header-info {
+        padding: 10px;
+
+        h2 {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #555;
+        }
+    }
+
+    &__header-resolved {
+        float: right;
+        padding-top: 20px;
+        padding-right: 20px;
+
+        input {
+            margin-left: 10px;
+        }
+    }
+
+    &__date {
+        font-size: 0.8em;
+        color: #555;
+        margin: 0;
+    }
+
+    &__text,
+    &__actions {
+        padding-left: 20px;
+        padding-bottom: 10px;
+        margin: 0;
+    }
+
+    &__actions {
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        > a {
+            display: inline-block;
+            padding-right: 4px;
+            font-size: 0.9em;
+
+            color: #333;
+        }
+    }
+
+    &__edit-actions,
+    &__reply-actions {
+        padding: 10px;
+        width: 100%;
+        background-color: #f7f7f7;
+        text-align: right;
+
+        button {
+            margin-right: 5px;
+        }
+    }
+
+    &__confirm-delete {
+        margin-right: 5px;
+    }
+
+    &__error {
+        color: red;
+        font-weight: bold;
+    }
+
+    textarea {
+        padding: 10px;
+        width: 100%;
+        background-color: #f7f7f7;
+    }
+}

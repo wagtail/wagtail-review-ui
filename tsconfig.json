@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "lib": ["es2015", "dom"],
+        "outDir": "lib",
+        "sourceMap": true,
+        "declaration": true,
+        "declarationDir": "dist/types",
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "files": [
+        "src/main.tsx",
+        "src/api.ts",
+        "src/components/Comment/index.tsx",
+        "src/components/CommentReply/index.tsx",
+        "src/components/ModerationBar/index.tsx",
+        "src/components/TopBar/index.tsx",
+        "src/utils/annotation.ts",
+        "src/utils/layout.ts",
+        "src/utils/sequences.ts",
+        "src/actions.ts",
+        "src/state.ts"
+    ]
+}

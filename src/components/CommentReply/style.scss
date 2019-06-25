@@ -1,0 +1,58 @@
+#comments .comment-reply {
+    &__header {
+        font-size: 0.9rem;
+
+        hr {
+            background-color: #ccc;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    }
+
+    &__date {
+        font-size: 0.8rem;
+        color: #555;
+        margin: 0;
+    }
+
+    &__header-info {
+        float: left;
+        padding: 10px;
+
+        h2 {
+            font-weight: bold;
+            color: #555;
+        }
+    }
+
+    &__header-actions {
+        float: right;
+        padding: 10px;
+
+        > a {
+            display: inline-block;
+            padding-right: 4px;
+            font-size: 0.9rem;
+
+            color: #333;
+        }
+    }
+
+    &__confirm-delete {
+        margin-right: 5px;
+    }
+
+    &__error {
+        color: red;
+        font-weight: bold;
+    }
+
+    &__text {
+        clear: both;
+        padding-left: 20px;
+        padding-bottom: 10px;
+        margin: 0;
+    }
+}
