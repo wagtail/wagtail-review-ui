@@ -282,4 +282,4 @@ export function initCommentsApp(
     });
 }
 
-export { default as APIClient }  from './api';
+export { default as APIClient } from './api';

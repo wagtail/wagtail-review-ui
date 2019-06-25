@@ -103,15 +103,20 @@ export default class APIClient {
 
     async deleteComment(comment: Comment) {
         if (comment.remoteId) {
-            let response = await fetch(`${this.baseUrl}/comments/${comment.remoteId}/`, {
-                method: 'DELETE',
-                headers: {
-                    'X-Review-Token': this.reviewToken
+            let response = await fetch(
+                `${this.baseUrl}/comments/${comment.remoteId}/`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'X-Review-Token': this.reviewToken
+                    }
                 }
-            });
+            );
 
             if (response.status != 204 && response.status != 404) {
-                throw new Error(`Unexpected status code returned when deleting comment: ${response.status}`);
+                throw new Error(
+                    `Unexpected status code returned when deleting comment: ${response.status}`
+                );
             }
         }
     }
@@ -167,7 +172,9 @@ export default class APIClient {
             );
 
             if (response.status != 204 && response.status != 404) {
-                throw new Error(`Unexpected status code returned when deleting comment reply: ${response.status}`);
+                throw new Error(
+                    `Unexpected status code returned when deleting comment reply: ${response.status}`
+                );
             }
         }
     }
