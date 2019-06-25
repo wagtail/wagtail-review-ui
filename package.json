@@ -1,6 +1,6 @@
 {
   "name": "wagtail-review-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Frontend UI for adding comments on Wagtail pages",
   "main": "dist/wagtail-review-ui.js",
   "types": "dist/types/main.d.ts",
