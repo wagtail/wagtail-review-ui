@@ -5,6 +5,7 @@
   "main": "dist/wagtail-review-ui.js",
   "types": "dist/types/main.d.ts",
   "scripts": {
+    "prepublish": "rm -rf ./dist && npm run build",
     "build": "webpack --mode=production",
     "start": "webpack --mode=development --watch",
     "lint": "prettier --write src/**/*.{ts,tsx,scss}"
@@ -27,12 +28,16 @@
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.1",
     "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
     "redux": "^4.0.1"
   }
 }
