@@ -34,6 +34,8 @@ module.exports = {
   },
   externals: {
     annotator: 'annotator',
+    'react': 'React',
+    'react-dom': 'ReactDOM',
   },
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ]
