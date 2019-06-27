@@ -20,11 +20,14 @@ export async function saveCommentReply(
     );
 
     try {
-        await api.saveCommentReply(comment, reply);
+        let replyData = await api.saveCommentReply(comment, reply);
 
         store.dispatch(
             updateReply(comment.localId, reply.localId, {
-                mode: 'default'
+                mode: 'default',
+                remoteId: replyData.id,
+                author: Author.fromApi(replyData.author),
+                date: Date.parse(replyData.created_at)
             })
         );
     } catch (err) {
