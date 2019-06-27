@@ -78,12 +78,12 @@ function sleep(ms: number) {
 }
 
 async function moderationLockCoroutine(api: APIClient) {
-    // A coroutine that pings the "ExtendModerationLock" endpoint every minute
+    // A coroutine that pings the "ExtendModerationLock" endpoint every 45 seconds
     // while the browser window is open
 
     while (true) {
         await api.extendModerationLock();
-        await sleep(1000 * 60);
+        await sleep(1000 * 45);
     }
 }
 
