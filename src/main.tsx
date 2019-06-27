@@ -14,7 +14,7 @@ import {
     Store,
     ModerationState
 } from './state';
-import { addComment, addReply, setFocusedComment } from './actions';
+import { addComment, addReply, setFocusedComment, updateComment } from './actions';
 import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
 import ModerationBarComponent from './components/ModerationBar';
@@ -111,6 +111,15 @@ export function initCommentsApp(
     if (moderationEnabled) {
         // Launch moderation lock coroutine
         moderationLockCoroutine(api);
+    }
+
+    // Check if there is "comment" query parameter.
+    // If this is set, the user has clicked on a "View on frontend" link of an
+    // individual comment. We should focus this comment and scroll to it
+    let urlParams = new URLSearchParams(window.location.search);
+    let initialFocusedCommentId: number | null = null;
+    if (urlParams.has('comment')) {
+        initialFocusedCommentId = parseInt(urlParams.get('comment'));
     }
 
     let render = () => {
@@ -260,6 +269,17 @@ export function initCommentsApp(
                         CommentReply.fromApi(getNextReplyId(), reply)
                     )
                 );
+            }
+
+            // If this is the initial focused comment. Focus it
+            // TODO: Scroll to this comment
+            if (initialFocusedCommentId && comment.id == initialFocusedCommentId) {
+                store.dispatch(setFocusedComment(commentId));
+
+                // HACK: If the comment is resolved. Set that comments "resolvedInThisSession" field so it displays
+                if (comment.is_resolved) {
+                    store.dispatch(updateComment(commentId, {resolvedThisSession: true}))
+                }
             }
         }
     });
