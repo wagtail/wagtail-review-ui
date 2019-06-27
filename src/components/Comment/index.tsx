@@ -107,17 +107,19 @@ export default class CommentComponent extends React.Component<CommentProps> {
                 );
             };
 
-            resolved = (
-                <div className="comment__header-resolved">
-                    <label htmlFor="resolved">Resolved</label>
-                    <input
-                        name="resolved"
-                        type="checkbox"
-                        onClick={toggleResolved}
-                        checked={comment.isResolved}
-                    />
-                </div>
-            );
+            if (comment.mode == 'default' || comment.mode == 'editing') {
+                resolved = (
+                    <div className="comment__header-resolved">
+                        <label htmlFor="resolved">Resolved</label>
+                        <input
+                            name="resolved"
+                            type="checkbox"
+                            onClick={toggleResolved}
+                            checked={comment.isResolved}
+                        />
+                    </div>
+                );
+            }
         }
 
         return (
