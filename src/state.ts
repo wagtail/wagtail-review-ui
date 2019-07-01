@@ -4,6 +4,10 @@ import { Annotation } from './utils/annotation';
 import * as actions from './actions';
 import { CommentApi, CommentReplyApi, ReviewerApi } from './api';
 
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+
 export class Author {
     id: number;
     name: string;
@@ -74,14 +78,7 @@ export class CommentReply {
     }
 }
 
-export interface CommentReplyUpdate {
-    remoteId?: number | null;
-    mode?: CommentReplyMode;
-    author?: Author;
-    date?: number;
-    text?: string;
-    editPreviousText?: string;
-}
+export type CommentReplyUpdate = Partial<CommentReply>;
 
 export type CommentMode =
     | 'default'
@@ -161,19 +158,7 @@ export class Comment {
     }
 }
 
-export interface CommentUpdate {
-    annotation?: Annotation;
-    remoteId?: number | null;
-    mode?: CommentMode;
-    isResolved?: boolean;
-    author?: Author;
-    date?: number;
-    text?: string;
-    newReply?: string;
-    editPreviousText?: string;
-    updatingResolvedStatus?: boolean;
-    resolvedThisSession?: boolean;
-}
+export type CommentUpdate = Partial<Comment>;
 
 export type ModerationStatus = 'approved' | 'needs-changes' | null;
 export type ModerationErrorCode =
@@ -195,23 +180,14 @@ export interface ModerationState {
     submitStage: ModerationSubmitStage;
 }
 
-export interface ModerationStateUpdate {
-    statusBoxOpen?: boolean;
-    status?: ModerationStatus;
-    comment?: string;
-    errors?: Set<ModerationErrorCode>;
-    submitStage?: ModerationSubmitStage;
-}
+export type ModerationStateUpdate = Partial<ModerationState>;
 
 interface GlobalSettings {
     commentsEnabled: boolean;
     showResolvedComments: boolean;
 }
 
-export interface GlobalSettingsUpdate {
-    commentsEnabled?: boolean;
-    showResolvedComments?: boolean;
-}
+export type GlobalSettingsUpdate = Partial<GlobalSettings>;
 
 interface State {
     comments: { [commentId: number]: Comment };
