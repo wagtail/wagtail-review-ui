@@ -20,7 +20,7 @@ export interface CommentApi {
     text: string;
     created_at: string;
     updated_at: string;
-    is_resolved: boolean;
+    resolved_at: string;
     replies: CommentReplyApi[];
     content_path: string;
     start_xpath: string;
@@ -87,7 +87,6 @@ export default class APIClient {
             body: JSON.stringify(<CommentApi>{
                 quote: comment.annotation.annotation.quote,
                 text: comment.text,
-                is_resolved: comment.isResolved, // FIXME: Might blat resolution done by someone else
                 content_path: comment.annotation.contentPath,
                 start_xpath:
                     comment.annotation.annotation.ranges[0].start || '.',

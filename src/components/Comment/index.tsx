@@ -88,17 +88,17 @@ export default class CommentComponent extends React.Component<CommentProps> {
             let toggleResolved = async (e: React.MouseEvent) => {
                 e.preventDefault();
 
-                let isResolved = !comment.isResolved;
+                let resolvedAt = comment.resolvedAt === null ? Date.now() : null;
 
                 store.dispatch(
                     updateComment(comment.localId, {
-                        isResolved,
+                        resolvedAt,
                         updatingResolvedStatus: true,
                         resolvedThisSession: true
                     })
                 );
 
-                await api.saveCommentResolvedStatus(comment, isResolved);
+                await api.saveCommentResolvedStatus(comment, resolvedAt !== null);
 
                 store.dispatch(
                     updateComment(comment.localId, {
@@ -115,7 +115,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
                             name="resolved"
                             type="checkbox"
                             onClick={toggleResolved}
-                            checked={comment.isResolved}
+                            checked={comment.resolvedAt !== null}
                         />
                     </div>
                 );

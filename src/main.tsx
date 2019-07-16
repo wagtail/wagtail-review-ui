@@ -38,7 +38,7 @@ function renderCommentsUi(
     } else if (!showResolvedComments) {
         // Hide all resolved comments unless they were resolved this session
         commentsToRender = commentsToRender.filter(comment => {
-            return !(comment.isResolved && !comment.resolvedThisSession);
+            return !(comment.resolvedAt !== null && !comment.resolvedThisSession);
         });
     }
     let commentsRendered = commentsToRender.map(comment => (
@@ -277,7 +277,7 @@ export function initCommentsApp(
                 store.dispatch(setFocusedComment(commentId));
 
                 // HACK: If the comment is resolved. Set that comments "resolvedInThisSession" field so it displays
-                if (comment.is_resolved) {
+                if (comment.resolved_at !== null) {
                     store.dispatch(updateComment(commentId, {resolvedThisSession: true}))
                 }
             }
