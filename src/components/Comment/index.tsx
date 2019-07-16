@@ -35,6 +35,7 @@ async function saveComment(comment: Comment, store: Store, api: APIClient) {
             })
         );
     } catch (err) {
+        console.error(err);
         store.dispatch(
             updateComment(comment.localId, {
                 mode: 'save_error'
@@ -56,6 +57,7 @@ async function doDeleteComment(comment: Comment, store: Store, api: APIClient) {
         store.dispatch(deleteComment(comment.localId));
         comment.annotation.onDelete();
     } catch (err) {
+        console.error(err);
         store.dispatch(
             updateComment(comment.localId, {
                 mode: 'delete_error'

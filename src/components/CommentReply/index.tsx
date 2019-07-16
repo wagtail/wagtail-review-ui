@@ -31,6 +31,7 @@ export async function saveCommentReply(
             })
         );
     } catch (err) {
+        console.error(err);
         store.dispatch(
             updateReply(comment.localId, reply.localId, {
                 mode: 'save_error'
