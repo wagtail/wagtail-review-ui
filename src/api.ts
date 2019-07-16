@@ -44,7 +44,7 @@ export default class APIClient {
     }
 
     async fetchAllComments(): Promise<CommentApi[]> {
-        let response = await fetch(`${this.baseUrl}/comments/`, {
+        let response = await fetch(`${this.baseUrl}comments/`, {
             headers: {
                 'X-Review-Token': this.reviewToken
             }
@@ -68,11 +68,11 @@ export default class APIClient {
     }
 
     async saveComment(comment: Comment): Promise<CommentApi> {
-        let url = `${this.baseUrl}/comments/`;
+        let url = `${this.baseUrl}comments/`;
         let method = 'POST';
 
         if (comment.remoteId) {
-            url = `${this.baseUrl}/comments/${comment.remoteId}/`;
+            url = `${this.baseUrl}comments/${comment.remoteId}/`;
             method = 'PUT';
         }
 
@@ -103,7 +103,7 @@ export default class APIClient {
     async deleteComment(comment: Comment) {
         if (comment.remoteId) {
             let response = await fetch(
-                `${this.baseUrl}/comments/${comment.remoteId}/`,
+                `${this.baseUrl}comments/${comment.remoteId}/`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -124,7 +124,7 @@ export default class APIClient {
         // Separate endpoint as anyone can mark a comment as resolved
         let method = isResolved ? 'PUT' : 'DELETE';
 
-        await fetch(`${this.baseUrl}/comments/${comment.remoteId}/resolved/`, {
+        await fetch(`${this.baseUrl}comments/${comment.remoteId}/resolved/`, {
             method,
             headers: {
                 'X-Review-Token': this.reviewToken
@@ -136,11 +136,11 @@ export default class APIClient {
         comment: Comment,
         reply: CommentReply
     ): Promise<CommentReplyApi> {
-        let url = `${this.baseUrl}/comments/${comment.remoteId}/replies/`;
+        let url = `${this.baseUrl}comments/${comment.remoteId}/replies/`;
         let method = 'POST';
 
         if (reply.remoteId) {
-            url = `${this.baseUrl}/comments/${comment.remoteId}/replies/${reply.remoteId}/`;
+            url = `${this.baseUrl}comments/${comment.remoteId}/replies/${reply.remoteId}/`;
             method = 'PUT';
         }
 
@@ -161,7 +161,7 @@ export default class APIClient {
     async deleteCommentReply(comment: Comment, reply: CommentReply) {
         if (reply.remoteId) {
             let response = await fetch(
-                `${this.baseUrl}/comments/${comment.remoteId}/replies/${reply.remoteId}/`,
+                `${this.baseUrl}comments/${comment.remoteId}/replies/${reply.remoteId}/`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -179,7 +179,7 @@ export default class APIClient {
     }
 
     async extendModerationLock() {
-        await fetch(`${this.baseUrl}/moderation/lock/`, {
+        await fetch(`${this.baseUrl}moderation/lock/`, {
             method: 'PUT',
             headers: {
                 'X-Review-Token': this.reviewToken
@@ -188,7 +188,7 @@ export default class APIClient {
     }
 
     async submitModerationResponse(status: ModerationStatus, comment: string) {
-        await fetch(`${this.baseUrl}/moderation/respond/`, {
+        await fetch(`${this.baseUrl}moderation/respond/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
