@@ -153,7 +153,7 @@ export class Comment {
             annotation,
             Author.fromApi(data.author),
             Date.parse(data.created_at),
-            { remoteId: data.id, resolvedAt: Date.parse(data.resolved_at), text: data.text }
+            { remoteId: data.id, resolvedAt: data.resolved_at ? Date.parse(data.resolved_at): null, text: data.text }
         );
     }
 }
