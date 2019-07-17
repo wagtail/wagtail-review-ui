@@ -12,11 +12,13 @@
     }
 
     &__header-info {
-        padding: 10px;
+        padding-top: 10px;
+        padding-left: 10px;
 
         h2 {
+            margin: 0;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.0em;
             color: #555;
         }
     }
@@ -25,6 +27,7 @@
         float: right;
         padding-top: 20px;
         padding-right: 20px;
+        font-size: 0.8em;
 
         input {
             margin-left: 10px;
@@ -32,14 +35,14 @@
     }
 
     &__date {
-        font-size: 0.8em;
+        font-size: 0.7em;
         color: #555;
         margin: 0;
     }
 
     &__text,
     &__actions {
-        padding-left: 20px;
+        padding: 20px;
         padding-bottom: 10px;
         margin: 0;
     }
@@ -57,12 +60,19 @@
         }
     }
 
+    &__replies {
+        list-style-type: none;
+        padding: 0;
+    }
+
     &__edit-actions,
     &__reply-actions {
-        padding: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
         width: 100%;
         background-color: #f7f7f7;
         text-align: right;
+        box-sizing: border-box;
 
         button {
             margin-right: 5px;
@@ -79,8 +89,12 @@
     }
 
     textarea {
+        font-family: 'Open Sans', sans-serif;
+        border: none;
+        margin: 0;
         padding: 10px;
         width: 100%;
         background-color: #f7f7f7;
+        box-sizing: border-box;
     }
 }
