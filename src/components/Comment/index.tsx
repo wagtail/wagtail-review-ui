@@ -76,7 +76,7 @@ export interface CommentProps {
 
 export default class CommentComponent extends React.Component<CommentProps> {
     renderHeader(): React.ReactFragment {
-        let { comment, store, api } = this.props;
+        let { comment, store, api, user } = this.props;
         let title, date, resolved;
 
         if (comment.mode == 'creating') {
@@ -84,7 +84,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             date = '';
             resolved = <></>;
         } else {
-            title = comment.author.name;
+            title = comment.author ? comment.author.name : user.name;
             date = dateFormat(comment.date, 'h:MM mmmm d');
 
             let toggleResolved = async (e: React.MouseEvent) => {
@@ -157,7 +157,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             e.preventDefault();
 
             let replyId = getNextReplyId();
-            let reply = new CommentReply(replyId, user, Date.now(), {
+            let reply = new CommentReply(replyId, null, Date.now(), {
                 text: comment.newReply,
                 mode: 'saving'
             });
@@ -461,7 +461,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
         };
 
         let actions = <></>;
-        if (this.props.user.isSameAs(comment.author)) {
+        if (comment.author == null || this.props.user.isSameAs(comment.author)) {
             actions = (
                 <div className="comment__actions">
                     <a href="#" onClick={onClickEdit}>

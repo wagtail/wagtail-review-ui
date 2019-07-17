@@ -5,6 +5,11 @@ export interface ReviewerApi {
     name: string;
 }
 
+export interface BaseApi {
+    you: ReviewerApi,
+    can_comment: boolean,
+}
+
 export interface CommentReplyApi {
     id: number;
     author: ReviewerApi;
@@ -41,6 +46,16 @@ export default class APIClient {
     constructor(baseUrl: string, reviewToken: string) {
         this.baseUrl = baseUrl;
         this.reviewToken = reviewToken;
+    }
+
+    async fetchBase(): Promise<BaseApi> {
+        let response = await fetch(`${this.baseUrl}`, {
+            headers: {
+                'X-Review-Token': this.reviewToken
+            }
+        });
+
+        return response.json();
     }
 
     async fetchAllComments(): Promise<CommentApi[]> {

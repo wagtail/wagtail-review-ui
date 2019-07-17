@@ -75,12 +75,12 @@ export interface CommentReplyProps {
 
 class CommentReplyHeader extends React.Component<CommentReplyProps> {
     render() {
-        let { reply } = this.props;
+        let { reply, user } = this.props;
         return (
             <div className="comment-reply__header">
                 <hr />
                 <div className="comment-reply__header-info">
-                    <h2>{reply.author.name}</h2>
+                    <h2>{reply.author ? reply.author.name : user.name}</h2>
                     <p className="comment-reply__date">
                         {dateFormat(reply.date, 'h:MM mmmm d')}
                     </p>
@@ -278,7 +278,7 @@ export default class CommentReplyComponent extends React.Component<
         };
 
         let actions = <></>;
-        if (this.props.user.isSameAs(reply.author)) {
+        if (reply.author == null || this.props.user.isSameAs(reply.author)) {
             actions = (
                 <>
                     <a href="#" onClick={onClickEdit}>

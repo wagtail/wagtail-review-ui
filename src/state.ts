@@ -44,14 +44,14 @@ export class CommentReply {
     localId: number;
     remoteId: number | null;
     mode: CommentReplyMode;
-    author: Author;
+    author: Author | null;
     date: number;
     text: string;
     editPreviousText: string;
 
     constructor(
         localId: number,
-        author: Author,
+        author: Author | null,
         date: number,
         {
             remoteId = <number | null>null,
@@ -97,7 +97,7 @@ export class Comment {
     remoteId: number | null;
     mode: CommentMode;
     resolvedAt: number|null;
-    author: Author;
+    author: Author | null;
     date: number;
     text: string;
     replies: { [replyId: number]: CommentReply };
@@ -110,7 +110,7 @@ export class Comment {
     constructor(
         localId: number,
         annotation: Annotation,
-        author: Author,
+        author: Author | null,
         date: number,
         {
             remoteId = <number | null>null,
@@ -183,6 +183,7 @@ export interface ModerationState {
 export type ModerationStateUpdate = Partial<ModerationState>;
 
 interface GlobalSettings {
+    user: Author | null;
     commentsEnabled: boolean;
     showResolvedComments: boolean;
 }
@@ -208,6 +209,7 @@ function initialState(): State {
             submitStage: 'not-submitted'
         },
         settings: {
+            user: null,
             commentsEnabled: true,
             showResolvedComments: false
         }

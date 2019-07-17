@@ -14,7 +14,7 @@ import {
     Store,
     ModerationState
 } from './state';
-import { addComment, addReply, setFocusedComment, updateComment } from './actions';
+import { addComment, addReply, setFocusedComment, updateComment, updateGlobalSettings } from './actions';
 import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
 import ModerationBarComponent from './components/ModerationBar';
@@ -25,15 +25,14 @@ function renderCommentsUi(
     store: Store,
     api: APIClient,
     layout: LayoutController,
-    user: Author,
     comments: Comment[],
     moderationEnabled: boolean,
     moderationState: ModerationState
 ): React.ReactElement {
-    let { commentsEnabled, showResolvedComments } = store.getState().settings;
+    let { commentsEnabled, showResolvedComments, user } = store.getState().settings;
     let commentsToRender = comments;
 
-    if (!commentsEnabled) {
+    if (!commentsEnabled || !user) {
         commentsToRender = [];
     } else if (!showResolvedComments) {
         // Hide all resolved comments unless they were resolved this session
@@ -90,8 +89,6 @@ async function moderationLockCoroutine(api: APIClient) {
 export function initCommentsApp(
     element: HTMLElement,
     api: APIClient,
-    authorId: number,
-    authorName: string,
     addAnnotatableSections: (
         addAnnotatableSection: (
             contentPath: string,
@@ -106,7 +103,11 @@ export function initCommentsApp(
     let store = createStore(reducer);
     let layout = new LayoutController();
 
-    let user = new Author(authorId, authorName);
+    api.fetchBase().then(data => {
+        store.dispatch(updateGlobalSettings({
+            user: Author.fromApi(data.you)
+        }));
+    });
 
     if (moderationEnabled) {
         // Launch moderation lock coroutine
@@ -159,7 +160,6 @@ export function initCommentsApp(
                 store,
                 api,
                 layout,
-                user,
                 commentList,
                 moderationEnabled,
                 state.moderation
@@ -176,7 +176,6 @@ export function initCommentsApp(
                             store,
                             api,
                             layout,
-                            user,
                             commentList,
                             moderationEnabled,
                             state.moderation
@@ -205,7 +204,7 @@ export function initCommentsApp(
 
         // Create the comment
         store.dispatch(
-            addComment(Comment.makeNew(commentId, annotation, user))
+            addComment(Comment.makeNew(commentId, annotation, null))
         );
 
         // Focus the comment
