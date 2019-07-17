@@ -136,7 +136,7 @@ export class Comment {
     static makeNew(
         localId: number,
         annotation: Annotation,
-        author: Author
+        author: Author | null
     ): Comment {
         return new Comment(localId, annotation, author, Date.now(), {
             mode: 'creating'

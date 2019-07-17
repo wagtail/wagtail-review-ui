@@ -37,7 +37,7 @@ export interface DeleteCommentAction {
 
 export interface SetFocusedCommentAction {
     type: 'set-focused-comment';
-    commentId: number;
+    commentId: number | null;
 }
 
 export interface AddReplyAction {
@@ -105,7 +105,7 @@ export function deleteComment(commentId: number): DeleteCommentAction {
     };
 }
 
-export function setFocusedComment(commentId: number): SetFocusedCommentAction {
+export function setFocusedComment(commentId: number | null): SetFocusedCommentAction {
     return {
         type: SET_FOCUSED_COMMENT,
         commentId

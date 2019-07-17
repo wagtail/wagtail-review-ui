@@ -554,7 +554,11 @@ export default class CommentComponent extends React.Component<CommentProps> {
         if (element instanceof HTMLElement) {
             // If this is a new comment, focus in the edit box
             if (this.props.comment.mode == 'creating') {
-                element.querySelector('textarea').focus();
+                let textAreaElement = element.querySelector('textarea');
+
+                if (textAreaElement instanceof HTMLTextAreaElement) {
+                    textAreaElement.focus();
+                }
             }
 
             this.props.layout.setCommentElement(

@@ -13,8 +13,8 @@ export class LayoutController {
     commentCalculatedPositions: { [commentId: number]: number } = {};
     isDirty: boolean = false;
 
-    setCommentElement(commentId: number, element: HTMLElement) {
-        if (element) {
+    setCommentElement(commentId: number, element: HTMLElement | null) {
+        if (element !== null) {
             this.commentElements[commentId] = element;
         } else {
             delete this.commentElements[commentId];
@@ -36,7 +36,7 @@ export class LayoutController {
         }
     }
 
-    setFocusedComment(commentId: number) {
+    setFocusedComment(commentId: number | null) {
         this.focusedComment = commentId;
         this.isDirty = true;
     }
@@ -79,7 +79,7 @@ export class LayoutController {
                 height: this.commentHeights[commentId],
                 comments: [parseInt(commentId)],
                 containsFocusedComment:
-                    this.focusedComment &&
+                    this.focusedComment !== null &&
                     commentId == this.focusedComment.toString(),
                 focusedCommentPosition: 0
             });
@@ -126,7 +126,7 @@ export class LayoutController {
 
                         // If this block contains the focused comment, position it so
                         // the focused comment is in it's desired position
-                        if (previousBlock.containsFocusedComment) {
+                        if (this.focusedComment !== null && previousBlock.containsFocusedComment) {
                             previousBlock.position =
                                 this.commentDesiredPositions[
                                     this.focusedComment

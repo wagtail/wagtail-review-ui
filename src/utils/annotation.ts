@@ -106,7 +106,7 @@ export class AnnotatableSection {
     ): Annotation {
         // Draw highlights if they don't exist yet
         if (!highlights) {
-            highlights = this.highlighter.draw(annotationInfo);
+            highlights = <HTMLElement[]>this.highlighter.draw(annotationInfo);
         }
 
         // Hide by default
