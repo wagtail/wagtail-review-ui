@@ -3,8 +3,6 @@ import * as React from 'react';
 import { Store } from '../../state';
 import { updateGlobalSettings } from '../../actions';
 
-import './style.scss';
-
 export interface TopBarProps {
     store: Store;
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import root from 'react-shadow';
 
 import APIClient from './api';
 import { Annotation, AnnotatableSection } from './utils/annotation';
@@ -26,7 +27,7 @@ import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
 import ModerationBarComponent from './components/ModerationBar';
 
-import './main.scss';
+import * as styles from '!css-to-string-loader!css-loader!sass-loader!./main.scss';
 
 function renderCommentsUi(
     store: Store,
@@ -79,7 +80,10 @@ function renderCommentsUi(
     return (
         <div>
             <TopBarComponent store={store} />
-            <ol className="comments-list">{commentsRendered}</ol>
+            <root.div>
+                <style dangerouslySetInnerHTML={{__html: styles}}/>
+                <ol className="comments-list">{commentsRendered}</ol>
+            </root.div>
             {moderationBar}
         </div>
     );
@@ -319,7 +323,7 @@ export function initCommentsApp(
             // ignore if click target is a comment or a highlight
             if (
                 !e.target.closest(
-                    '#comments .comment, .annotator-hl, .annotator-adder'
+                    '#comments, .annotator-hl, .annotator-adder'
                 )
             ) {
                 // Running store.dispatch directly here seems to prevent the event from being handled anywhere else

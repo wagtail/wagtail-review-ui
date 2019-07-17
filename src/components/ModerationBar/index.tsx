@@ -8,7 +8,6 @@ import {
 } from '../../state';
 import APIClient from '../../api';
 
-import './style.scss';
 import { updateModerationState } from '../../actions';
 
 interface ModerationBarProps extends ModerationState {

@@ -5,8 +5,6 @@ import { Comment, CommentReply, Store, Author } from '../../state';
 import APIClient from '../../api';
 import { updateReply, deleteReply } from '../../actions';
 
-import './style.scss';
-
 export async function saveCommentReply(
     comment: Comment,
     reply: CommentReply,
