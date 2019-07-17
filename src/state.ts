@@ -96,7 +96,7 @@ export class Comment {
     annotation: Annotation;
     remoteId: number | null;
     mode: CommentMode;
-    resolvedAt: number|null;
+    resolvedAt: number | null;
     author: Author | null;
     date: number;
     text: string;
@@ -115,7 +115,7 @@ export class Comment {
         {
             remoteId = <number | null>null,
             mode = <CommentMode>'default',
-            resolvedAt = <number|null>null,
+            resolvedAt = <number | null>null,
             text = '',
             replies = {},
             newReply = ''
@@ -153,7 +153,13 @@ export class Comment {
             annotation,
             Author.fromApi(data.author),
             Date.parse(data.created_at),
-            { remoteId: data.id, resolvedAt: data.resolved_at ? Date.parse(data.resolved_at): null, text: data.text }
+            {
+                remoteId: data.id,
+                resolvedAt: data.resolved_at
+                    ? Date.parse(data.resolved_at)
+                    : null,
+                text: data.text
+            }
         );
     }
 }

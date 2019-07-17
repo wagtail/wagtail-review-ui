@@ -6,8 +6,8 @@ export interface ReviewerApi {
 }
 
 export interface BaseApi {
-    you: ReviewerApi,
-    can_comment: boolean,
+    you: ReviewerApi;
+    can_comment: boolean;
 }
 
 export interface CommentReplyApi {

@@ -126,7 +126,10 @@ export class LayoutController {
 
                         // If this block contains the focused comment, position it so
                         // the focused comment is in it's desired position
-                        if (this.focusedComment !== null && previousBlock.containsFocusedComment) {
+                        if (
+                            this.focusedComment !== null &&
+                            previousBlock.containsFocusedComment
+                        ) {
                             previousBlock.position =
                                 this.commentDesiredPositions[
                                     this.focusedComment

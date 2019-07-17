@@ -14,7 +14,13 @@ import {
     Store,
     ModerationState
 } from './state';
-import { addComment, addReply, setFocusedComment, updateComment, updateGlobalSettings } from './actions';
+import {
+    addComment,
+    addReply,
+    setFocusedComment,
+    updateComment,
+    updateGlobalSettings
+} from './actions';
 import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
 import ModerationBarComponent from './components/ModerationBar';
@@ -29,7 +35,11 @@ function renderCommentsUi(
     moderationEnabled: boolean,
     moderationState: ModerationState
 ): React.ReactElement {
-    let { commentsEnabled, showResolvedComments, user } = store.getState().settings;
+    let {
+        commentsEnabled,
+        showResolvedComments,
+        user
+    } = store.getState().settings;
     let commentsToRender = comments;
 
     if (!commentsEnabled || !user) {
@@ -37,7 +47,9 @@ function renderCommentsUi(
     } else if (!showResolvedComments) {
         // Hide all resolved comments unless they were resolved this session
         commentsToRender = commentsToRender.filter(comment => {
-            return !(comment.resolvedAt !== null && !comment.resolvedThisSession);
+            return !(
+                comment.resolvedAt !== null && !comment.resolvedThisSession
+            );
         });
     }
     let commentsRendered = commentsToRender.map(comment => (
@@ -104,9 +116,11 @@ export function initCommentsApp(
     let layout = new LayoutController();
 
     api.fetchBase().then(data => {
-        store.dispatch(updateGlobalSettings({
-            user: Author.fromApi(data.you)
-        }));
+        store.dispatch(
+            updateGlobalSettings({
+                user: Author.fromApi(data.you)
+            })
+        );
     });
 
     if (moderationEnabled) {
@@ -272,12 +286,17 @@ export function initCommentsApp(
 
             // If this is the initial focused comment. Focus it
             // TODO: Scroll to this comment
-            if (initialFocusedCommentId && comment.id == initialFocusedCommentId) {
+            if (
+                initialFocusedCommentId &&
+                comment.id == initialFocusedCommentId
+            ) {
                 store.dispatch(setFocusedComment(commentId));
 
                 // HACK: If the comment is resolved. Set that comments "resolvedInThisSession" field so it displays
                 if (comment.resolved_at !== null) {
-                    store.dispatch(updateComment(commentId, {resolvedThisSession: true}))
+                    store.dispatch(
+                        updateComment(commentId, { resolvedThisSession: true })
+                    );
                 }
             }
         }

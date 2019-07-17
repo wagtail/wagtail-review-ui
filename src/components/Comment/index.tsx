@@ -90,7 +90,8 @@ export default class CommentComponent extends React.Component<CommentProps> {
             let toggleResolved = async (e: React.MouseEvent) => {
                 e.preventDefault();
 
-                let resolvedAt = comment.resolvedAt === null ? Date.now() : null;
+                let resolvedAt =
+                    comment.resolvedAt === null ? Date.now() : null;
 
                 store.dispatch(
                     updateComment(comment.localId, {
@@ -100,7 +101,10 @@ export default class CommentComponent extends React.Component<CommentProps> {
                     })
                 );
 
-                await api.saveCommentResolvedStatus(comment, resolvedAt !== null);
+                await api.saveCommentResolvedStatus(
+                    comment,
+                    resolvedAt !== null
+                );
 
                 store.dispatch(
                     updateComment(comment.localId, {
@@ -461,7 +465,10 @@ export default class CommentComponent extends React.Component<CommentProps> {
         };
 
         let actions = <></>;
-        if (comment.author == null || this.props.user.isSameAs(comment.author)) {
+        if (
+            comment.author == null ||
+            this.props.user.isSameAs(comment.author)
+        ) {
             actions = (
                 <div className="comment__actions">
                     <a href="#" onClick={onClickEdit}>
