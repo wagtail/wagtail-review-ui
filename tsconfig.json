@@ -23,6 +23,7 @@
         "src/utils/layout.ts",
         "src/utils/sequences.ts",
         "src/actions.ts",
-        "src/state.ts"
+        "src/state.ts",
+        "src/custom.d.ts"
     ]
 }

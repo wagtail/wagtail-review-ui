@@ -15,8 +15,6 @@ import { LayoutController } from '../../utils/layout';
 import { getNextReplyId } from '../../utils/sequences';
 import CommentReplyComponent, { saveCommentReply } from '../CommentReply';
 
-import './style.scss';
-
 async function saveComment(comment: Comment, store: Store, api: APIClient) {
     store.dispatch(
         updateComment(comment.localId, {
