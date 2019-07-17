@@ -9,7 +9,7 @@ export class LayoutController {
     commentAnnotations: { [commentId: number]: Annotation } = {};
     commentDesiredPositions: { [commentId: number]: number } = {};
     commentHeights: { [commentId: number]: number } = {};
-    focusedComment: number | null = null;
+    pinnedComment: number | null = null;
     commentCalculatedPositions: { [commentId: number]: number } = {};
     isDirty: boolean = false;
 
@@ -36,8 +36,8 @@ export class LayoutController {
         }
     }
 
-    setFocusedComment(commentId: number | null) {
-        this.focusedComment = commentId;
+    setPinnedComment(commentId: number | null) {
+        this.pinnedComment = commentId;
         this.isDirty = true;
     }
 
@@ -67,8 +67,8 @@ export class LayoutController {
             position: number;
             height: number;
             comments: number[];
-            containsFocusedComment: boolean;
-            focusedCommentPosition: number;
+            containsPinnedComment: boolean;
+            pinnedCommentPosition: number;
         }
 
         // Build list of blocks (starting with one for each comment)
@@ -78,10 +78,10 @@ export class LayoutController {
                 position: this.commentDesiredPositions[commentId],
                 height: this.commentHeights[commentId],
                 comments: [parseInt(commentId)],
-                containsFocusedComment:
-                    this.focusedComment !== null &&
-                    commentId == this.focusedComment.toString(),
-                focusedCommentPosition: 0
+                containsPinnedComment:
+                    this.pinnedComment !== null &&
+                    commentId == this.pinnedComment.toString(),
+                pinnedCommentPosition: 0
             });
         }
 
@@ -106,10 +106,10 @@ export class LayoutController {
                         // Merge the blocks
                         previousBlock.comments.push(...block.comments);
 
-                        if (block.containsFocusedComment) {
-                            previousBlock.containsFocusedComment = true;
-                            previousBlock.focusedCommentPosition =
-                                block.focusedCommentPosition +
+                        if (block.containsPinnedComment) {
+                            previousBlock.containsPinnedComment = true;
+                            previousBlock.pinnedCommentPosition =
+                                block.pinnedCommentPosition +
                                 previousBlock.height;
                         }
                         previousBlock.height += block.height;
@@ -117,7 +117,7 @@ export class LayoutController {
                         // Make sure comments don't disappear off the top of the page
                         // But only if a comment isn't focused
                         if (
-                            !this.focusedComment &&
+                            !this.pinnedComment &&
                             previousBlock.position < TOP_MARGIN + OFFSET
                         ) {
                             previousBlock.position =
@@ -127,13 +127,13 @@ export class LayoutController {
                         // If this block contains the focused comment, position it so
                         // the focused comment is in it's desired position
                         if (
-                            this.focusedComment !== null &&
-                            previousBlock.containsFocusedComment
+                            this.pinnedComment !== null &&
+                            previousBlock.containsPinnedComment
                         ) {
                             previousBlock.position =
                                 this.commentDesiredPositions[
-                                    this.focusedComment
-                                ] - previousBlock.focusedCommentPosition;
+                                    this.pinnedComment
+                                ] - previousBlock.pinnedCommentPosition;
                         }
 
                         continue;

@@ -19,7 +19,8 @@ import {
     addReply,
     setFocusedComment,
     updateComment,
-    updateGlobalSettings
+    updateGlobalSettings,
+    setPinnedComment
 } from './actions';
 import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
@@ -111,6 +112,7 @@ export function initCommentsApp(
 ) {
     let annotatableSections: { [contentPath: string]: AnnotatableSection } = {};
     let focusedComment: number | null = null;
+    let pinnedComment: number | null = null;
 
     let store = createStore(reducer);
     let layout = new LayoutController();
@@ -147,10 +149,6 @@ export function initCommentsApp(
 
         // Check if the focused comment has changed
         if (state.focusedComment != focusedComment) {
-            // Tell layout controller about the focused comment
-            // so it is moved alongside it's annotation
-            layout.setFocusedComment(state.focusedComment);
-
             // Unfocus previously focused annotation
             if (focusedComment) {
                 // Note: the comment may have just been deleted. In that case,
@@ -167,6 +165,15 @@ export function initCommentsApp(
             }
 
             focusedComment = state.focusedComment;
+        }
+
+        // Check if the pinned comment has changed
+        if (state.pinnedComment != pinnedComment) {
+            // Tell layout controller about the pinned comment
+            // so it is moved alongside it's annotation
+            layout.setPinnedComment(state.pinnedComment);
+
+            pinnedComment = state.pinnedComment;
         }
 
         ReactDOM.render(
@@ -208,9 +215,10 @@ export function initCommentsApp(
     let newComment = (annotation: Annotation) => {
         let commentId = getNextCommentId();
 
-        // Focus comment when annotation is clicked
+        // Focus and pin comment when annotation is clicked
         annotation.setOnClickHandler(() => {
             store.dispatch(setFocusedComment(commentId));
+            store.dispatch(setPinnedComment(commentId));
         });
 
         // Let layout engine know the annotation so it would position the comment correctly
@@ -221,8 +229,9 @@ export function initCommentsApp(
             addComment(Comment.makeNew(commentId, annotation, null))
         );
 
-        // Focus the comment
+        // Focus and pin the comment
         store.dispatch(setFocusedComment(commentId));
+        store.dispatch(setPinnedComment(commentId));
     };
 
     let selectionEnabled = () => {
@@ -261,9 +270,10 @@ export function initCommentsApp(
 
             let commentId = getNextCommentId();
 
-            // Focus comment when annotation is clicked
+            // Focus and pin comment when annotation is clicked
             annotation.setOnClickHandler(() => {
                 store.dispatch(setFocusedComment(commentId));
+                store.dispatch(setPinnedComment(commentId));
             });
 
             // Let layout engine know the annotation so it would position the comment correctly
@@ -284,13 +294,14 @@ export function initCommentsApp(
                 );
             }
 
-            // If this is the initial focused comment. Focus it
+            // If this is the initial focused comment. Focus and pin it
             // TODO: Scroll to this comment
             if (
                 initialFocusedCommentId &&
                 comment.id == initialFocusedCommentId
             ) {
                 store.dispatch(setFocusedComment(commentId));
+                store.dispatch(setPinnedComment(commentId));
 
                 // HACK: If the comment is resolved. Set that comments "resolvedInThisSession" field so it displays
                 if (comment.resolved_at !== null) {
@@ -314,6 +325,7 @@ export function initCommentsApp(
                 // Running store.dispatch directly here seems to prevent the event from being handled anywhere else
                 setTimeout(() => {
                     store.dispatch(setFocusedComment(null));
+                    store.dispatch(setPinnedComment(null));
                 }, 1);
             }
         }

@@ -7,7 +7,8 @@ import {
     updateComment,
     deleteComment,
     setFocusedComment,
-    addReply
+    addReply,
+    setPinnedComment
 } from '../../actions';
 import APIClient from '../../api';
 import { LayoutController } from '../../utils/layout';
@@ -534,6 +535,12 @@ export default class CommentComponent extends React.Component<CommentProps> {
             );
         };
 
+        let onDoubleClick = () => {
+            this.props.store.dispatch(
+                setPinnedComment(this.props.comment.localId)
+            );
+        };
+
         let top = this.props.layout.getCommentPosition(
             this.props.comment.localId
         );
@@ -549,6 +556,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
                 }}
                 data-comment-id={this.props.comment.localId}
                 onClick={onClick}
+                onDoubleClick={onDoubleClick}
             >
                 {inner}
             </li>

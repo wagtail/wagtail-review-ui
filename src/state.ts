@@ -199,6 +199,7 @@ export type GlobalSettingsUpdate = Partial<GlobalSettings>;
 interface State {
     comments: { [commentId: number]: Comment };
     focusedComment: number | null;
+    pinnedComment: number | null;
     moderation: ModerationState;
     settings: GlobalSettings;
 }
@@ -207,6 +208,7 @@ function initialState(): State {
     return {
         comments: {},
         focusedComment: null,
+        pinnedComment: null,
         moderation: {
             statusBoxOpen: false,
             status: null,
@@ -298,6 +300,12 @@ export function reducer(state: State | undefined, action: actions.Action) {
 
                 state.focusedComment = action.commentId;
             }
+            break;
+
+        case actions.SET_PINNED_COMMENT:
+            state = Object.assign({}, state, {
+                pinnedComment: action.commentId
+            });
             break;
 
         case actions.ADD_REPLY:

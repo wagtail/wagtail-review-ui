@@ -11,6 +11,7 @@ export const ADD_COMMENT = 'add-comment';
 export const UPDATE_COMMENT = 'update-comment';
 export const DELETE_COMMENT = 'delete-comment';
 export const SET_FOCUSED_COMMENT = 'set-focused-comment';
+export const SET_PINNED_COMMENT = 'set-pinned-comment';
 
 export const ADD_REPLY = 'add-reply';
 export const UPDATE_REPLY = 'update-reply';
@@ -37,6 +38,11 @@ export interface DeleteCommentAction {
 
 export interface SetFocusedCommentAction {
     type: 'set-focused-comment';
+    commentId: number | null;
+}
+
+export interface SetPinnedCommentAction {
+    type: 'set-pinned-comment';
     commentId: number | null;
 }
 
@@ -74,6 +80,7 @@ export type Action =
     | UpdateCommentAction
     | DeleteCommentAction
     | SetFocusedCommentAction
+    | SetPinnedCommentAction
     | AddReplyAction
     | UpdateReplyAction
     | DeleteReplyAction
@@ -110,6 +117,15 @@ export function setFocusedComment(
 ): SetFocusedCommentAction {
     return {
         type: SET_FOCUSED_COMMENT,
+        commentId
+    };
+}
+
+export function setPinnedComment(
+    commentId: number | null
+): SetPinnedCommentAction {
+    return {
+        type: SET_PINNED_COMMENT,
         commentId
     };
 }
