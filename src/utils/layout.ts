@@ -47,7 +47,7 @@ export class LayoutController {
         let sum = 0;
         let count = 0;
         for (let highlight of annotation.highlights) {
-            sum += highlight.offsetTop;
+            sum += highlight.getBoundingClientRect().top + document.documentElement.scrollTop;
             count++;
         }
 
