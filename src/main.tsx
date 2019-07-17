@@ -81,8 +81,11 @@ function renderCommentsUi(
         <div>
             <TopBarComponent store={store} />
             <root.div>
-                <link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" rel="stylesheet" />
-                <style dangerouslySetInnerHTML={{__html: styles}}/>
+                <link
+                    href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
+                    rel="stylesheet"
+                />
+                <style dangerouslySetInnerHTML={{ __html: styles }} />
                 <ol className="comments-list">{commentsRendered}</ol>
             </root.div>
             {moderationBar}
@@ -323,9 +326,7 @@ export function initCommentsApp(
         if (e.target instanceof HTMLElement) {
             // ignore if click target is a comment or a highlight
             if (
-                !e.target.closest(
-                    '#comments, .annotator-hl, .annotator-adder'
-                )
+                !e.target.closest('#comments, .annotator-hl, .annotator-adder')
             ) {
                 // Running store.dispatch directly here seems to prevent the event from being handled anywhere else
                 setTimeout(() => {
