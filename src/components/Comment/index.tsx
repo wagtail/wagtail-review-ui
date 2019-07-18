@@ -187,8 +187,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
         };
 
         let replies = [];
-        for (const replyId in comment.replies) {
-            const reply = comment.replies[replyId];
+        for (const reply of comment.replies.values()) {
             replies.push(
                 <CommentReplyComponent
                     key={reply.localId}

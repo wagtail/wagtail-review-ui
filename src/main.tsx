@@ -150,8 +150,8 @@ export function initCommentsApp(
         let state = store.getState();
         let commentList: Comment[] = [];
 
-        for (let commentId in state.comments.comments) {
-            commentList.push(state.comments.comments[commentId]);
+        for (let comment of state.comments.comments.values()) {
+            commentList.push(comment);
         }
 
         // Check if the focused comment has changed
@@ -161,14 +161,14 @@ export function initCommentsApp(
                 // Note: the comment may have just been deleted. In that case,
                 // don't worry about unfocusing the annotation as that will be
                 // deleted
-                if (focusedComment in state.comments) {
-                    state.comments.comments[focusedComment].annotation.onUnfocus();
+                if (state.comments.comments.has(focusedComment)) {
+                    state.comments.comments.get(focusedComment).annotation.onUnfocus();
                 }
             }
 
             // Focus the new focused annotation
             if (state.comments.focusedComment) {
-                state.comments.comments[state.comments.focusedComment].annotation.onFocus();
+                state.comments.comments.get(state.comments.focusedComment).annotation.onFocus();
             }
 
             focusedComment = state.comments.focusedComment;

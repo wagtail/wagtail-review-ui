@@ -5,33 +5,33 @@ const TOP_MARGIN = 100.0; // Spacing from the top to the first comment in pixels
 const OFFSET = -50; // How many pixels from the annotation position should the comments be placed?
 
 export class LayoutController {
-    commentElements: { [commentId: number]: HTMLElement } = {};
-    commentAnnotations: { [commentId: number]: Annotation } = {};
-    commentDesiredPositions: { [commentId: number]: number } = {};
-    commentHeights: { [commentId: number]: number } = {};
+    commentElements: Map<number, HTMLElement> = new Map();
+    commentAnnotations: Map<number, Annotation> = new Map();
+    commentDesiredPositions: Map<number, number> = new Map();
+    commentHeights: Map<number, number> = new Map();
     pinnedComment: number | null = null;
-    commentCalculatedPositions: { [commentId: number]: number } = {};
+    commentCalculatedPositions: Map<number, number> = new Map();
     isDirty: boolean = false;
 
     setCommentElement(commentId: number, element: HTMLElement | null) {
         if (element !== null) {
-            this.commentElements[commentId] = element;
+            this.commentElements.set(commentId, element);
         } else {
-            delete this.commentElements[commentId];
+            this.commentElements.delete(commentId);
         }
 
         this.isDirty = true;
     }
 
     setCommentAnnotation(commentId: number, annotation: Annotation) {
-        this.commentAnnotations[commentId] = annotation;
+        this.commentAnnotations.set(commentId, annotation);
         this.updateDesiredPosition(commentId);
         this.isDirty = true;
     }
 
     setCommentHeight(commentId: number, height: number) {
-        if (this.commentHeights[commentId] != height) {
-            this.commentHeights[commentId] = height;
+        if (this.commentHeights.get(commentId) != height) {
+            this.commentHeights.set(commentId, height);
             this.isDirty = true;
         }
     }
@@ -42,7 +42,7 @@ export class LayoutController {
     }
 
     updateDesiredPosition(commentId: number) {
-        let annotation = this.commentAnnotations[commentId];
+        let annotation = this.commentAnnotations.get(commentId);
 
         let sum = 0;
         let count = 0;
@@ -57,7 +57,7 @@ export class LayoutController {
             return;
         }
 
-        this.commentDesiredPositions[commentId] = sum / count + OFFSET;
+        this.commentDesiredPositions.set(commentId, sum / count + OFFSET);
     }
 
     refresh() {
@@ -75,14 +75,14 @@ export class LayoutController {
 
         // Build list of blocks (starting with one for each comment)
         let blocks: Block[] = [];
-        for (let commentId in this.commentElements) {
+        for (let commentId of this.commentElements.keys()) {
             blocks.push({
-                position: this.commentDesiredPositions[commentId],
-                height: this.commentHeights[commentId],
-                comments: [parseInt(commentId)],
+                position: this.commentDesiredPositions.get(commentId),
+                height: this.commentHeights.get(commentId),
+                comments: [commentId],
                 containsPinnedComment:
                     this.pinnedComment !== null &&
-                    commentId == this.pinnedComment.toString(),
+                    commentId == this.pinnedComment,
                 pinnedCommentPosition: 0
             });
         }
@@ -133,9 +133,9 @@ export class LayoutController {
                             previousBlock.containsPinnedComment
                         ) {
                             previousBlock.position =
-                                this.commentDesiredPositions[
+                                this.commentDesiredPositions.get(
                                     this.pinnedComment
-                                ] - previousBlock.pinnedCommentPosition;
+                                ) - previousBlock.pinnedCommentPosition;
                         }
 
                         continue;
@@ -153,8 +153,8 @@ export class LayoutController {
         for (let block of blocks) {
             let currentPosition = block.position;
             for (let commentId of block.comments) {
-                this.commentCalculatedPositions[commentId] = currentPosition;
-                currentPosition += this.commentHeights[commentId] + GAP;
+                this.commentCalculatedPositions.set(commentId, currentPosition);
+                currentPosition += this.commentHeights.get(commentId) + GAP;
             }
         }
 
@@ -162,10 +162,10 @@ export class LayoutController {
     }
 
     getCommentPosition(commentId: number) {
-        if (commentId in this.commentCalculatedPositions) {
-            return this.commentCalculatedPositions[commentId];
+        if (this.commentCalculatedPositions.has(commentId)) {
+            return this.commentCalculatedPositions.get(commentId);
         } else {
-            return this.commentDesiredPositions[commentId];
+            return this.commentDesiredPositions.get(commentId);
         }
     }
 }
