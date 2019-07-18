@@ -8,7 +8,7 @@ import {
 } from '../../state/moderation';
 import APIClient from '../../api';
 
-import { updateModerationState } from '../../actions/moderation';
+import { updateModerationState, setErrors, clearError } from '../../actions/moderation';
 
 interface ModerationBarProps extends ModerationState {
     store: Store;
@@ -20,16 +20,6 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         if (!this.props.statusBoxOpen) {
             return <></>;
         }
-
-        let clearError = (errorCode: ModerationErrorCode) => {
-            if (!this.props.errors.has(errorCode)) {
-                return;
-            }
-
-            let errors = new Set(this.props.errors);
-            errors.delete(errorCode);
-            this.props.store.dispatch(updateModerationState({ errors }));
-        };
 
         let validate = (): boolean => {
             let errors: Set<ModerationErrorCode> = new Set();
@@ -46,16 +36,20 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                 errors.add('comment-too-long');
             }
 
-            this.props.store.dispatch(updateModerationState({ errors }));
+            this.props.store.dispatch(setErrors(errors));
 
             return errors.size == 0;
         };
 
-        let setStatusOnClick = (status: ModerationStatus) => {
-            return (e: React.MouseEvent<HTMLInputElement>) => {
+
+        let setStatusOnChange = (status: ModerationStatus) => {
+            return (e: React.ChangeEvent<HTMLInputElement>) => {
                 e.preventDefault();
                 this.props.store.dispatch(updateModerationState({ status }));
-                clearError('status-required');
+
+                if (status !== null && 'status-required' in this.props.errors) {
+                    this.props.store.dispatch(clearError('status-required'));
+                }
             };
         };
 
@@ -65,12 +59,12 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                 updateModerationState({ comment: e.target.value })
             );
 
-            if (e.target.value.length > 0) {
-                clearError('comment-required');
+            if (e.target.value.length > 0 && 'comment-required' in this.props.errors) {
+                this.props.store.dispatch(clearError('comment-required'));
             }
 
-            if (e.target.value.length <= 200) {
-                clearError('comment-too-long');
+            if (e.target.value.length <= 200 && 'comment-too-long' in this.props.errors) {
+                this.props.store.dispatch(clearError('comment-too-long'));
             }
         };
 
@@ -125,15 +119,15 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                     <input
                         type="radio"
                         id="approved"
-                        checked={this.props.status == 'approved'}
-                        onClick={setStatusOnClick('approved')}
+                        checked={this.props.status === 'approved'}
+                        onChange={setStatusOnChange('approved')}
                     />
                     <label htmlFor="approved">Approved</label>
                     <input
                         type="radio"
                         id="needs-changes"
-                        checked={this.props.status == 'needs-changes'}
-                        onClick={setStatusOnClick('needs-changes')}
+                        checked={this.props.status === 'needs-changes'}
+                        onChange={setStatusOnChange('needs-changes')}
                     />
                     <label htmlFor="needs-changes">Needs changes</label>
 

@@ -49,6 +49,18 @@ export function reducer(state: ModerationState | undefined, action: actions.Acti
         case actions.UPDATE_MODERATION_STATE:
             state = update(state, action.update);
             break;
+
+        case actions.SET_ERRORS:
+            state = update(state, { errors: action.errors });
+            break;
+
+        case actions.CLEAR_ERROR:
+            if (this.props.errors.has(action.error)) {
+                const errors = new Set(state.errors);
+                errors.delete(action.error);
+                state = update(state, { errors });
+            }
+            break;
     }
 
     return state;
