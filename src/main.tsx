@@ -79,18 +79,16 @@ function renderCommentsUi(
     }
 
     return (
-        <div>
+        <root.div>
+            <link
+                href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
+                rel="stylesheet"
+            />
+            <style dangerouslySetInnerHTML={{ __html: styles }} />
             <TopBarComponent store={store} />
-            <root.div>
-                <link
-                    href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
-                    rel="stylesheet"
-                />
-                <style dangerouslySetInnerHTML={{ __html: styles }} />
-                <ol className="comments-list">{commentsRendered}</ol>
-            </root.div>
+            <ol className="comments-list">{commentsRendered}</ol>
             {moderationBar}
-        </div>
+        </root.div>
     );
 }
 
