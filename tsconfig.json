@@ -22,8 +22,14 @@
         "src/utils/annotation.ts",
         "src/utils/layout.ts",
         "src/utils/sequences.ts",
-        "src/actions.ts",
-        "src/state.ts",
+        "src/actions/index.ts",
+        "src/actions/comments.ts",
+        "src/actions/moderation.ts",
+        "src/actions/settings.ts",
+        "src/state/index.ts",
+        "src/state/comments.ts",
+        "src/state/moderation.ts",
+        "src/state/settings.ts",
         "src/custom.d.ts"
     ]
 }

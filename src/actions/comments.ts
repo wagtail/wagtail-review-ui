@@ -3,9 +3,7 @@ import {
     CommentUpdate,
     CommentReply,
     CommentReplyUpdate,
-    GlobalSettingsUpdate,
-    ModerationStateUpdate
-} from './state';
+} from '../state/comments';
 
 export const ADD_COMMENT = 'add-comment';
 export const UPDATE_COMMENT = 'update-comment';
@@ -17,62 +15,49 @@ export const ADD_REPLY = 'add-reply';
 export const UPDATE_REPLY = 'update-reply';
 export const DELETE_REPLY = 'delete-reply';
 
-export const UPDATE_MODERATION_STATE = 'update-moderation-state';
-export const UPDATE_GLOBAL_SETTINGS = 'update-global-settings';
-
 export interface AddCommentAction {
-    type: 'add-comment';
+    type: typeof ADD_COMMENT;
     comment: Comment;
 }
 
 export interface UpdateCommentAction {
-    type: 'update-comment';
+    type: typeof UPDATE_COMMENT;
     commentId: number;
     update: CommentUpdate;
 }
 
 export interface DeleteCommentAction {
-    type: 'delete-comment';
+    type: typeof DELETE_COMMENT;
     commentId: number;
 }
 
 export interface SetFocusedCommentAction {
-    type: 'set-focused-comment';
+    type: typeof SET_FOCUSED_COMMENT;
     commentId: number | null;
 }
 
 export interface SetPinnedCommentAction {
-    type: 'set-pinned-comment';
+    type: typeof SET_PINNED_COMMENT;
     commentId: number | null;
 }
 
 export interface AddReplyAction {
-    type: 'add-reply';
+    type: typeof ADD_REPLY;
     commentId: number;
     reply: CommentReply;
 }
 
 export interface UpdateReplyAction {
-    type: 'update-reply';
+    type: typeof UPDATE_REPLY;
     commentId: number;
     replyId: number;
     update: CommentReplyUpdate;
 }
 
 export interface DeleteReplyAction {
-    type: 'delete-reply';
+    type: typeof DELETE_REPLY;
     commentId: number;
     replyId: number;
-}
-
-export interface UpdateModerationStateAction {
-    type: 'update-moderation-state';
-    update: ModerationStateUpdate;
-}
-
-export interface UpdateGlobalSettingsAction {
-    type: 'update-global-settings';
-    update: GlobalSettingsUpdate;
 }
 
 export type Action =
@@ -83,9 +68,7 @@ export type Action =
     | SetPinnedCommentAction
     | AddReplyAction
     | UpdateReplyAction
-    | DeleteReplyAction
-    | UpdateModerationStateAction
-    | UpdateGlobalSettingsAction;
+    | DeleteReplyAction;
 
 export function addComment(comment: Comment): AddCommentAction {
     return {
@@ -162,23 +145,5 @@ export function deleteReply(
         type: DELETE_REPLY,
         commentId,
         replyId
-    };
-}
-
-export function updateModerationState(
-    update: ModerationStateUpdate
-): UpdateModerationStateAction {
-    return {
-        type: UPDATE_MODERATION_STATE,
-        update
-    };
-}
-
-export function updateGlobalSettings(
-    update: GlobalSettingsUpdate
-): UpdateGlobalSettingsAction {
-    return {
-        type: UPDATE_GLOBAL_SETTINGS,
-        update
     };
 }

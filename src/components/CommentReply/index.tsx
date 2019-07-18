@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as dateFormat from 'dateformat';
 
-import { Comment, CommentReply, Store, Author } from '../../state';
+import { Store } from '../../state';
+import { Comment, CommentReply, Author } from '../../state/comments';
 import APIClient from '../../api';
-import { updateReply, deleteReply } from '../../actions';
+import { updateReply, deleteReply } from '../../actions/comments';
 
 export async function saveCommentReply(
     comment: Comment,

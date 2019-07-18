@@ -1,14 +1,14 @@
 import * as React from 'react';
 
+import { Store } from '../../state';
 import {
-    Store,
     ModerationState,
     ModerationStatus,
     ModerationErrorCode
-} from '../../state';
+} from '../../state/moderation';
 import APIClient from '../../api';
 
-import { updateModerationState } from '../../actions';
+import { updateModerationState } from '../../actions/moderation';
 
 interface ModerationBarProps extends ModerationState {
     store: Store;

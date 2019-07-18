@@ -2,14 +2,15 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as dateFormat from 'dateformat';
 
-import { Author, Comment, CommentReply, Store } from '../../state';
+import { Store } from '../../state';
+import { Author, Comment, CommentReply } from '../../state/comments';
 import {
     updateComment,
     deleteComment,
     setFocusedComment,
     addReply,
     setPinnedComment
-} from '../../actions';
+} from '../../actions/comments';
 import APIClient from '../../api';
 import { LayoutController } from '../../utils/layout';
 import { getNextReplyId } from '../../utils/sequences';

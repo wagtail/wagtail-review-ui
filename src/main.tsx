@@ -7,27 +7,28 @@ import APIClient from './api';
 import { Annotation, AnnotatableSection } from './utils/annotation';
 import { LayoutController } from './utils/layout';
 import { getNextCommentId, getNextReplyId } from './utils/sequences';
+import { Store, reducer } from './state';
 import {
     Comment,
     CommentReply,
-    reducer,
     Author,
-    Store,
-    ModerationState
-} from './state';
+} from './state/comments';
+import {
+    ModerationState,
+} from './state/moderation';
 import {
     addComment,
     addReply,
     setFocusedComment,
     updateComment,
-    updateGlobalSettings,
     setPinnedComment
-} from './actions';
+} from './actions/comments';
 import CommentComponent from './components/Comment';
 import TopBarComponent from './components/TopBar';
 import ModerationBarComponent from './components/ModerationBar';
 
 import * as styles from '!css-to-string-loader!css-loader!sass-loader!./main.scss';
+import { updateGlobalSettings } from './actions/settings';
 
 function renderCommentsUi(
     store: Store,
@@ -122,7 +123,7 @@ export function initCommentsApp(
     let focusedComment: number | null = null;
     let pinnedComment: number | null = null;
 
-    let store = createStore(reducer);
+    let store: Store = createStore(reducer);
     let layout = new LayoutController();
 
     api.fetchBase().then(data => {
@@ -151,37 +152,37 @@ export function initCommentsApp(
         let state = store.getState();
         let commentList: Comment[] = [];
 
-        for (let commentId in state.comments) {
-            commentList.push(state.comments[commentId]);
+        for (let commentId in state.comments.comments) {
+            commentList.push(state.comments.comments[commentId]);
         }
 
         // Check if the focused comment has changed
-        if (state.focusedComment != focusedComment) {
+        if (state.comments.focusedComment != focusedComment) {
             // Unfocus previously focused annotation
             if (focusedComment) {
                 // Note: the comment may have just been deleted. In that case,
                 // don't worry about unfocusing the annotation as that will be
                 // deleted
                 if (focusedComment in state.comments) {
-                    state.comments[focusedComment].annotation.onUnfocus();
+                    state.comments.comments[focusedComment].annotation.onUnfocus();
                 }
             }
 
             // Focus the new focused annotation
-            if (state.focusedComment) {
-                state.comments[state.focusedComment].annotation.onFocus();
+            if (state.comments.focusedComment) {
+                state.comments.comments[state.comments.focusedComment].annotation.onFocus();
             }
 
-            focusedComment = state.focusedComment;
+            focusedComment = state.comments.focusedComment;
         }
 
         // Check if the pinned comment has changed
-        if (state.pinnedComment != pinnedComment) {
+        if (state.comments.pinnedComment != pinnedComment) {
             // Tell layout controller about the pinned comment
             // so it is moved alongside it's annotation
-            layout.setPinnedComment(state.pinnedComment);
+            layout.setPinnedComment(state.comments.pinnedComment);
 
-            pinnedComment = state.pinnedComment;
+            pinnedComment = state.comments.pinnedComment;
         }
 
         ReactDOM.render(

@@ -1,4 +1,5 @@
-import { Comment, CommentReply, ModerationStatus } from './state';
+import { Comment, CommentReply } from './state/comments';
+import { ModerationStatus } from './state/moderation';
 
 export interface ReviewerApi {
     id: number;

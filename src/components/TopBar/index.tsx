@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Store } from '../../state';
-import { updateGlobalSettings } from '../../actions';
+import { updateGlobalSettings } from '../../actions/settings';
 
 export interface TopBarProps {
     store: Store;

@@ -1,8 +1,6 @@
-import { Store } from 'redux';
-
-import { Annotation } from './utils/annotation';
-import * as actions from './actions';
-import { CommentApi, CommentReplyApi, ReviewerApi } from './api';
+import { Annotation } from '../utils/annotation';
+import * as actions from '../actions/comments';
+import { CommentApi, CommentReplyApi, ReviewerApi } from '../api';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
@@ -166,69 +164,25 @@ export class Comment {
 
 export type CommentUpdate = Partial<Comment>;
 
-export type ModerationStatus = 'approved' | 'needs-changes' | null;
-export type ModerationErrorCode =
-    | 'status-required'
-    | 'comment-required'
-    | 'comment-too-long'
-    | null;
-export type ModerationSubmitStage =
-    | 'not-submitted'
-    | 'submitting'
-    | 'errored'
-    | 'submitted';
-
-export interface ModerationState {
-    statusBoxOpen: boolean;
-    status: ModerationStatus;
-    comment: string;
-    errors: Set<ModerationErrorCode>;
-    submitStage: ModerationSubmitStage;
-}
-
-export type ModerationStateUpdate = Partial<ModerationState>;
-
-interface GlobalSettings {
-    user: Author | null;
-    commentsEnabled: boolean;
-    showResolvedComments: boolean;
-}
-
-export type GlobalSettingsUpdate = Partial<GlobalSettings>;
-
-interface State {
+export interface CommentsState {
     comments: { [commentId: number]: Comment };
     focusedComment: number | null;
     pinnedComment: number | null;
-    moderation: ModerationState;
-    settings: GlobalSettings;
 }
 
-function initialState(): State {
+function initialState(): CommentsState {
     return {
         comments: {},
         focusedComment: null,
         pinnedComment: null,
-        moderation: {
-            statusBoxOpen: false,
-            status: null,
-            comment: '',
-            errors: new Set(),
-            submitStage: 'not-submitted'
-        },
-        settings: {
-            user: null,
-            commentsEnabled: true,
-            showResolvedComments: false
-        }
     };
 }
 
-function update(base: any, update: any): any {
+function update<T>(base: T, update: Partial<T>): T {
     return Object.assign({}, base, update);
 }
 
-function cloneComments(state: State): State {
+function cloneComments(state: CommentsState): CommentsState {
     // Returns a new state with the comments list cloned
     return update(state, { comments: update(state.comments, {}) });
 }
@@ -238,7 +192,7 @@ function cloneReplies(comment: Comment): Comment {
     return update(comment, { replies: update(comment.replies, {}) });
 }
 
-export function reducer(state: State | undefined, action: actions.Action) {
+export function reducer(state: CommentsState | undefined, action: actions.Action) {
     if (typeof state === 'undefined') {
         state = initialState();
     }
@@ -303,7 +257,7 @@ export function reducer(state: State | undefined, action: actions.Action) {
             break;
 
         case actions.SET_PINNED_COMMENT:
-            state = Object.assign({}, state, {
+            state = update(state, {
                 pinnedComment: action.commentId
             });
             break;
@@ -351,22 +305,7 @@ export function reducer(state: State | undefined, action: actions.Action) {
             delete state.comments[action.commentId].replies[action.replyId];
             break;
 
-        case actions.UPDATE_MODERATION_STATE:
-            state = Object.assign({}, state, {
-                moderation: Object.assign({}, state.moderation, action.update)
-            });
-            break;
-
-        case actions.UPDATE_GLOBAL_SETTINGS:
-            state = Object.assign({}, state, {
-                settings: Object.assign({}, state.settings, action.update)
-            });
-            break;
     }
-
-    console.log(action);
 
     return state;
 }
-
-export type Store = Store<State, actions.Action>;
