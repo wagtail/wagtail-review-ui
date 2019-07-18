@@ -148,11 +148,7 @@ export function initCommentsApp(
 
     let render = () => {
         let state = store.getState();
-        let commentList: Comment[] = [];
-
-        for (let comment of state.comments.comments.values()) {
-            commentList.push(comment);
-        }
+        let commentList: Comment[] = Array.from(state.comments.comments.values());
 
         // Check if the focused comment has changed
         if (state.comments.focusedComment != focusedComment) {

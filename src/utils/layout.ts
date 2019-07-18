@@ -44,20 +44,22 @@ export class LayoutController {
     updateDesiredPosition(commentId: number) {
         let annotation = this.commentAnnotations.get(commentId);
 
-        let sum = 0;
-        let count = 0;
-        for (let highlight of annotation.highlights) {
-            sum +=
-                highlight.getBoundingClientRect().top +
-                document.documentElement.scrollTop;
-            count++;
-        }
-
-        if (count == 0) {
+        if (annotation.highlights.length === 0) {
             return;
         }
 
-        this.commentDesiredPositions.set(commentId, sum / count + OFFSET);
+        // Get average position
+        const sumOfPositions = annotation.highlights
+            .map(highlight => {
+                return highlight.getBoundingClientRect().top + document.documentElement.scrollTop;
+            })
+            .reduce((sum, position) => {
+                return sum + position;
+            });
+
+        const averagePosition = sumOfPositions / annotation.highlights.length;
+
+        this.commentDesiredPositions.set(commentId, averagePosition + OFFSET);
     }
 
     refresh() {
@@ -74,9 +76,8 @@ export class LayoutController {
         }
 
         // Build list of blocks (starting with one for each comment)
-        let blocks: Block[] = [];
-        for (let commentId of this.commentElements.keys()) {
-            blocks.push({
+        let blocks: Block[] = Array.from(this.commentElements.keys()).map(commentId => {
+            return {
                 position: this.commentDesiredPositions.get(commentId),
                 height: this.commentHeights.get(commentId),
                 comments: [commentId],
@@ -84,8 +85,8 @@ export class LayoutController {
                     this.pinnedComment !== null &&
                     commentId == this.pinnedComment,
                 pinnedCommentPosition: 0
-            });
-        }
+            };
+        });
 
         // Sort blocks
         blocks.sort((a, b) => a.position - b.position);
@@ -97,7 +98,7 @@ export class LayoutController {
             let newBlocks: Block[] = [];
             let previousBlock: Block | null = null;
 
-            for (let block of blocks) {
+            blocks = blocks.map(block => {
                 if (previousBlock) {
                     if (
                         previousBlock.position + previousBlock.height + GAP >
@@ -138,25 +139,27 @@ export class LayoutController {
                                 ) - previousBlock.pinnedCommentPosition;
                         }
 
-                        continue;
+                        // Remove block
+                        return null;
                     }
                 }
 
-                newBlocks.push(block);
                 previousBlock = block;
-            }
+                return block;
+            })
+            .filter(block => block === null);
 
             blocks = newBlocks;
         }
 
         // Write positions
-        for (let block of blocks) {
+        blocks.forEach(block => {
             let currentPosition = block.position;
-            for (let commentId of block.comments) {
+            block.comments.forEach(commentId => {
                 this.commentCalculatedPositions.set(commentId, currentPosition);
                 currentPosition += this.commentHeights.get(commentId) + GAP;
-            }
-        }
+            });
+        });
 
         this.isDirty = false;
     }
