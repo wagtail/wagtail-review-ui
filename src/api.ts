@@ -204,7 +204,7 @@ export default class APIClient {
     }
 
     async submitModerationResponse(status: ModerationStatus, comment: string) {
-        await fetch(`${this.baseUrl}moderation/respond/`, {
+        await fetch(`${this.baseUrl}respond/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
