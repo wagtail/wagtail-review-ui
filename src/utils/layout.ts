@@ -103,59 +103,54 @@ export class LayoutController {
             let newBlocks: Block[] = [];
             let previousBlock: Block | null = null;
 
-            blocks = blocks
-                .map(block => {
-                    if (previousBlock) {
-                        if (
-                            previousBlock.position +
-                                previousBlock.height +
-                                GAP >
-                            block.position
-                        ) {
-                            overlaps = true;
+            for (let block of blocks) {
+                if (previousBlock) {
+                    if (
+                        previousBlock.position + previousBlock.height + GAP >
+                        block.position
+                    ) {
+                        overlaps = true;
 
-                            // Merge the blocks
-                            previousBlock.comments.push(...block.comments);
+                        // Merge the blocks
+                        previousBlock.comments.push(...block.comments);
 
-                            if (block.containsPinnedComment) {
-                                previousBlock.containsPinnedComment = true;
-                                previousBlock.pinnedCommentPosition =
-                                    block.pinnedCommentPosition +
-                                    previousBlock.height;
-                            }
-                            previousBlock.height += block.height;
-
-                            // Make sure comments don't disappear off the top of the page
-                            // But only if a comment isn't focused
-                            if (
-                                !this.pinnedComment &&
-                                previousBlock.position < TOP_MARGIN + OFFSET
-                            ) {
-                                previousBlock.position =
-                                    TOP_MARGIN + previousBlock.height - OFFSET;
-                            }
-
-                            // If this block contains the focused comment, position it so
-                            // the focused comment is in it's desired position
-                            if (
-                                this.pinnedComment !== null &&
-                                previousBlock.containsPinnedComment
-                            ) {
-                                previousBlock.position =
-                                    this.commentDesiredPositions.get(
-                                        this.pinnedComment
-                                    ) - previousBlock.pinnedCommentPosition;
-                            }
-
-                            // Remove block
-                            return null;
+                        if (block.containsPinnedComment) {
+                            previousBlock.containsPinnedComment = true;
+                            previousBlock.pinnedCommentPosition =
+                                block.pinnedCommentPosition +
+                                previousBlock.height;
                         }
-                    }
+                        previousBlock.height += block.height;
 
-                    previousBlock = block;
-                    return block;
-                })
-                .filter(block => block === null);
+                        // Make sure comments don't disappear off the top of the page
+                        // But only if a comment isn't focused
+                        if (
+                            !this.pinnedComment &&
+                            previousBlock.position < TOP_MARGIN + OFFSET
+                        ) {
+                            previousBlock.position =
+                                TOP_MARGIN + previousBlock.height - OFFSET;
+                        }
+
+                        // If this block contains the focused comment, position it so
+                        // the focused comment is in it's desired position
+                        if (
+                            this.pinnedComment !== null &&
+                            previousBlock.containsPinnedComment
+                        ) {
+                            previousBlock.position =
+                                this.commentDesiredPositions.get(
+                                    this.pinnedComment
+                                ) - previousBlock.pinnedCommentPosition;
+                        }
+
+                        continue;
+                    }
+                }
+
+                newBlocks.push(block);
+                previousBlock = block;
+            }
 
             blocks = newBlocks;
         }
