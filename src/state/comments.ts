@@ -1,30 +1,20 @@
 import { Annotation } from '../utils/annotation';
 import * as actions from '../actions/comments';
-import { CommentApi, CommentReplyApi, ReviewerApi } from '../api';
+import { ReviewerApi as AuthorApi } from '../api';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
 };
 
-export class Author {
+export interface Author {
     id: number;
     name: string;
+}
 
-    constructor(id: number, name: string) {
-        this.id = id;
-        this.name = name;
-    }
-
-    isSameAs(other: Author): boolean {
-        return this.id == other.id;
-    }
-
-    static unknown(): Author {
-        return new Author(0, 'Unknown');
-    }
-
-    static fromApi(data: ReviewerApi): Author {
-        return new Author(data.id, data.name);
+export function authorFromApi(data: AuthorApi): Author {
+    return {
+        id: data.id,
+        name: data.name,
     }
 }
 
@@ -38,7 +28,7 @@ export type CommentReplyMode =
     | 'save_error'
     | 'delete_error';
 
-export class CommentReply {
+export interface CommentReply {
     localId: number;
     remoteId: number | null;
     mode: CommentReplyMode;
@@ -46,34 +36,27 @@ export class CommentReply {
     date: number;
     text: string;
     editPreviousText: string;
+}
 
-    constructor(
-        localId: number,
-        author: Author | null,
-        date: number,
-        {
-            remoteId = <number | null>null,
-            mode = <CommentReplyMode>'default',
-            text = ''
-        }
-    ) {
-        this.localId = localId;
-        this.remoteId = remoteId;
-        this.mode = mode;
-        this.author = author;
-        this.date = date;
-        this.text = text;
-        this.editPreviousText = '';
+export function newCommentReply(
+    localId: number,
+    author: Author | null,
+    date: number,
+    {
+        remoteId = <number | null>null,
+        mode = <CommentReplyMode>'default',
+        text = ''
     }
-
-    static fromApi(localId: number, data: CommentReplyApi): CommentReply {
-        return new CommentReply(
-            localId,
-            Author.fromApi(data.author),
-            Date.parse(data.created_at),
-            { remoteId: data.id, text: data.text }
-        );
-    }
+): CommentReply {
+    return {
+        localId,
+        remoteId,
+        mode,
+        author,
+        date,
+        text,
+        editPreviousText: '',
+    };
 }
 
 export type CommentReplyUpdate = Partial<CommentReply>;
@@ -89,7 +72,7 @@ export type CommentMode =
     | 'save_error'
     | 'delete_error';
 
-export class Comment {
+export interface Comment {
     localId: number;
     annotation: Annotation;
     remoteId: number | null;
@@ -100,66 +83,41 @@ export class Comment {
     text: string;
     replies: Map<number, CommentReply>;
     newReply: string;
-    editPreviousText: string = '';
-    isFocused: boolean = false;
-    updatingResolvedStatus: boolean = false;
-    resolvedThisSession: boolean = false;
+    editPreviousText: string;
+    isFocused: boolean;
+    updatingResolvedStatus: boolean;
+    resolvedThisSession: boolean;
+}
 
-    constructor(
-        localId: number,
-        annotation: Annotation,
-        author: Author | null,
-        date: number,
-        {
-            remoteId = <number | null>null,
-            mode = <CommentMode>'default',
-            resolvedAt = <number | null>null,
-            text = '',
-            replies = new Map(),
-            newReply = ''
-        }
-    ) {
-        this.localId = localId;
-        this.annotation = annotation;
-        this.remoteId = remoteId;
-        this.mode = mode;
-        this.resolvedAt = resolvedAt;
-        this.author = author;
-        this.date = date;
-        this.text = text;
-        this.replies = replies;
-        this.newReply = newReply;
+export function newComment(
+    localId: number,
+    annotation: Annotation,
+    author: Author | null,
+    date: number,
+    {
+        remoteId = <number | null>null,
+        mode = <CommentMode>'default',
+        resolvedAt = <number | null>null,
+        text = '',
+        replies = new Map(),
     }
-
-    static makeNew(
-        localId: number,
-        annotation: Annotation,
-        author: Author | null
-    ): Comment {
-        return new Comment(localId, annotation, author, Date.now(), {
-            mode: 'creating'
-        });
-    }
-
-    static fromApi(
-        localId: number,
-        annotation: Annotation,
-        data: CommentApi
-    ): Comment {
-        return new Comment(
-            localId,
-            annotation,
-            Author.fromApi(data.author),
-            Date.parse(data.created_at),
-            {
-                remoteId: data.id,
-                resolvedAt: data.resolved_at
-                    ? Date.parse(data.resolved_at)
-                    : null,
-                text: data.text
-            }
-        );
-    }
+): Comment {
+    return {
+        localId,
+        annotation,
+        remoteId,
+        mode,
+        resolvedAt,
+        author,
+        date,
+        text,
+        replies,
+        newReply: '',
+        editPreviousText: '',
+        isFocused: false,
+        updatingResolvedStatus:false,
+        resolvedThisSession: false,
+    };
 }
 
 export type CommentUpdate = Partial<Comment>;

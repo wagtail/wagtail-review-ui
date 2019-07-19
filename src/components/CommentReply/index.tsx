@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as dateFormat from 'dateformat';
 
 import { Store } from '../../state';
-import { Comment, CommentReply, Author } from '../../state/comments';
+import { Comment, CommentReply, Author, authorFromApi } from '../../state/comments';
 import APIClient from '../../api';
 import { updateReply, deleteReply } from '../../actions/comments';
 
@@ -25,7 +25,7 @@ export async function saveCommentReply(
             updateReply(comment.localId, reply.localId, {
                 mode: 'default',
                 remoteId: replyData.id,
-                author: Author.fromApi(replyData.author),
+                author: authorFromApi(replyData.author),
                 date: Date.parse(replyData.created_at)
             })
         );
@@ -277,7 +277,7 @@ export default class CommentReplyComponent extends React.Component<
         };
 
         let actions = <></>;
-        if (reply.author == null || this.props.user.isSameAs(reply.author)) {
+        if (reply.author == null || this.props.user.id === reply.author.id) {
             actions = (
                 <>
                     <a href="#" onClick={onClickEdit}>

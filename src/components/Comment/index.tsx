@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as dateFormat from 'dateformat';
 
 import { Store } from '../../state';
-import { Author, Comment, CommentReply } from '../../state/comments';
+import { Author, Comment, authorFromApi, newCommentReply } from '../../state/comments';
 import {
     updateComment,
     deleteComment,
@@ -30,7 +30,7 @@ async function saveComment(comment: Comment, store: Store, api: APIClient) {
             updateComment(comment.localId, {
                 mode: 'default',
                 remoteId: commentData.id,
-                author: Author.fromApi(commentData.author),
+                author: authorFromApi(commentData.author),
                 date: Date.parse(commentData.created_at)
             })
         );
@@ -161,7 +161,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             e.preventDefault();
 
             let replyId = getNextReplyId();
-            let reply = new CommentReply(replyId, null, Date.now(), {
+            let reply = newCommentReply(replyId, null, Date.now(), {
                 text: comment.newReply,
                 mode: 'saving'
             });
@@ -466,7 +466,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
         let actions = <></>;
         if (
             comment.author == null ||
-            this.props.user.isSameAs(comment.author)
+            this.props.user.id === comment.author.id
         ) {
             actions = (
                 <div className="comment__actions">

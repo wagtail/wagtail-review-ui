@@ -10,8 +10,9 @@ import { getNextCommentId, getNextReplyId } from './utils/sequences';
 import { Store, reducer } from './state';
 import {
     Comment,
-    CommentReply,
-    Author,
+    authorFromApi,
+    newCommentReply,
+    newComment,
 } from './state/comments';
 import {
     ModerationState,
@@ -127,7 +128,7 @@ export function initCommentsApp(
     api.fetchBase().then(data => {
         store.dispatch(
             updateGlobalSettings({
-                user: Author.fromApi(data.you)
+                user: authorFromApi(data.you)
             })
         );
     });
@@ -215,7 +216,7 @@ export function initCommentsApp(
 
     store.subscribe(render);
 
-    let newComment = (annotation: Annotation) => {
+    let makeNewComment = (annotation: Annotation) => {
         let commentId = getNextCommentId();
 
         // Focus and pin comment when annotation is clicked
@@ -229,7 +230,11 @@ export function initCommentsApp(
 
         // Create the comment
         store.dispatch(
-            addComment(Comment.makeNew(commentId, annotation, null))
+            addComment(
+                newComment(commentId, annotation, null, Date.now(), {
+                    mode: 'creating'
+                })
+            )
         );
 
         // Focus and pin the comment
@@ -245,7 +250,7 @@ export function initCommentsApp(
         annotatableSections[contentPath] = new AnnotatableSection(
             contentPath,
             element,
-            newComment,
+            makeNewComment,
             selectionEnabled
         );
     });
@@ -284,7 +289,21 @@ export function initCommentsApp(
 
             // Create comment
             store.dispatch(
-                addComment(Comment.fromApi(commentId, annotation, comment))
+                addComment(
+                    newComment(
+                        commentId,
+                        annotation,
+                        authorFromApi(comment.author),
+                        Date.parse(comment.created_at),
+                        {
+                            remoteId: comment.id,
+                            resolvedAt: comment.resolved_at
+                                ? Date.parse(comment.resolved_at)
+                                : null,
+                            text: comment.text
+                        }
+                    )
+                )
             );
 
             // Create replies
@@ -292,7 +311,12 @@ export function initCommentsApp(
                 store.dispatch(
                     addReply(
                         commentId,
-                        CommentReply.fromApi(getNextReplyId(), reply)
+                        newCommentReply(
+                            getNextReplyId(),
+                            authorFromApi(reply.author),
+                            Date.parse(reply.created_at),
+                            { remoteId: reply.id, text: reply.text }
+                        )
                     )
                 );
             }
