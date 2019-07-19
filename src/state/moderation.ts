@@ -40,7 +40,10 @@ function update<T>(base: T, update: Partial<T>): T {
     return Object.assign({}, base, update);
 }
 
-export function reducer(state: ModerationState | undefined, action: actions.Action) {
+export function reducer(
+    state: ModerationState | undefined,
+    action: actions.Action
+) {
     if (typeof state === 'undefined') {
         state = initialState();
     }

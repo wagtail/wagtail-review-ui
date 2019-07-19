@@ -2,7 +2,7 @@ import {
     Comment,
     CommentUpdate,
     CommentReply,
-    CommentReplyUpdate,
+    CommentReplyUpdate
 } from '../state/comments';
 
 export const ADD_COMMENT = 'add-comment';

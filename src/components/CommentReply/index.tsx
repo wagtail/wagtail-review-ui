@@ -2,7 +2,12 @@ import * as React from 'react';
 import * as dateFormat from 'dateformat';
 
 import { Store } from '../../state';
-import { Comment, CommentReply, Author, authorFromApi } from '../../state/comments';
+import {
+    Comment,
+    CommentReply,
+    Author,
+    authorFromApi
+} from '../../state/comments';
 import APIClient from '../../api';
 import { updateReply, deleteReply } from '../../actions/comments';
 

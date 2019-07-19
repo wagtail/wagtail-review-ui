@@ -1,5 +1,6 @@
 import {
-    ModerationStateUpdate, ModerationErrorCode
+    ModerationStateUpdate,
+    ModerationErrorCode
 } from '../state/moderation';
 
 export const UPDATE_MODERATION_STATE = 'update-moderation-state';
@@ -21,7 +22,10 @@ export interface ClearErrorAction {
     error: ModerationErrorCode;
 }
 
-export type Action = UpdateModerationStateAction | SetErrorsAction | ClearErrorAction;
+export type Action =
+    | UpdateModerationStateAction
+    | SetErrorsAction
+    | ClearErrorAction;
 
 export function updateModerationState(
     update: ModerationStateUpdate
@@ -32,20 +36,16 @@ export function updateModerationState(
     };
 }
 
-export function setErrors(
-    errors: Set<ModerationErrorCode>,
-): SetErrorsAction {
+export function setErrors(errors: Set<ModerationErrorCode>): SetErrorsAction {
     return {
         type: SET_ERRORS,
-        errors,
-    }
+        errors
+    };
 }
 
-export function clearError(
-    error: ModerationErrorCode,
-): ClearErrorAction {
+export function clearError(error: ModerationErrorCode): ClearErrorAction {
     return {
         type: CLEAR_ERROR,
-        error,
-    }
+        error
+    };
 }

@@ -14,8 +14,8 @@ export interface Author {
 export function authorFromApi(data: AuthorApi): Author {
     return {
         id: data.id,
-        name: data.name,
-    }
+        name: data.name
+    };
 }
 
 export type CommentReplyMode =
@@ -55,7 +55,7 @@ export function newCommentReply(
         author,
         date,
         text,
-        editPreviousText: '',
+        editPreviousText: ''
     };
 }
 
@@ -99,7 +99,7 @@ export function newComment(
         mode = <CommentMode>'default',
         resolvedAt = <number | null>null,
         text = '',
-        replies = new Map(),
+        replies = new Map()
     }
 ): Comment {
     return {
@@ -115,8 +115,8 @@ export function newComment(
         newReply: '',
         editPreviousText: '',
         isFocused: false,
-        updatingResolvedStatus:false,
-        resolvedThisSession: false,
+        updatingResolvedStatus: false,
+        resolvedThisSession: false
     };
 }
 
@@ -132,7 +132,7 @@ function initialState(): CommentsState {
     return {
         comments: new Map(),
         focusedComment: null,
-        pinnedComment: null,
+        pinnedComment: null
     };
 }
 
@@ -150,7 +150,10 @@ function cloneReplies(comment: Comment): Comment {
     return update(comment, { replies: new Map(comment.replies.entries()) });
 }
 
-export function reducer(state: CommentsState | undefined, action: actions.Action) {
+export function reducer(
+    state: CommentsState | undefined,
+    action: actions.Action
+) {
     if (typeof state === 'undefined') {
         state = initialState();
     }
@@ -166,10 +169,10 @@ export function reducer(state: CommentsState | undefined, action: actions.Action
                 break;
             }
             state = cloneComments(state);
-            state.comments.set(action.commentId, update(
-                state.comments.get(action.commentId),
-                action.update
-            ));
+            state.comments.set(
+                action.commentId,
+                update(state.comments.get(action.commentId), action.update)
+            );
 
             break;
 
@@ -192,24 +195,24 @@ export function reducer(state: CommentsState | undefined, action: actions.Action
             // Unset isFocused on previous focused comment
             if (state.focusedComment) {
                 // Unset isFocused on previous focused comment
-                state.comments.set(state.focusedComment, update(
-                    state.comments.get(state.focusedComment),
-                    {
+                state.comments.set(
+                    state.focusedComment,
+                    update(state.comments.get(state.focusedComment), {
                         isFocused: false
-                    }
-                ));
+                    })
+                );
 
                 state.focusedComment = null;
             }
 
             // Set isFocused on focused comment
             if (action.commentId && state.comments.has(action.commentId)) {
-                state.comments.set(action.commentId, update(
-                    state.comments.get(action.commentId),
-                    {
+                state.comments.set(
+                    action.commentId,
+                    update(state.comments.get(action.commentId), {
                         isFocused: true
-                    }
-                ));
+                    })
+                );
 
                 state.focusedComment = action.commentId;
             }
@@ -226,43 +229,62 @@ export function reducer(state: CommentsState | undefined, action: actions.Action
                 break;
             }
             state = cloneComments(state);
-            state.comments.set(action.commentId, cloneReplies(
-                state.comments.get(action.commentId)
-            ));
-            state.comments.get(action.commentId).replies.set(action.reply.localId, action.reply);
+            state.comments.set(
+                action.commentId,
+                cloneReplies(state.comments.get(action.commentId))
+            );
+            state.comments
+                .get(action.commentId)
+                .replies.set(action.reply.localId, action.reply);
             break;
 
         case actions.UPDATE_REPLY:
-            if (!(state.comments.has(action.commentId))) {
+            if (!state.comments.has(action.commentId)) {
                 break;
             }
-            if (!state.comments.get(action.commentId).replies.has(action.replyId)) {
+            if (
+                !state.comments
+                    .get(action.commentId)
+                    .replies.has(action.replyId)
+            ) {
                 break;
             }
             state = cloneComments(state);
-            state.comments.set(action.commentId, cloneReplies(
-                state.comments.get(action.commentId)
-            ));
-            state.comments.get(action.commentId).replies.set(action.replyId, update(
-                state.comments.get(action.commentId).replies.get(action.replyId),
-                action.update
-            ));
+            state.comments.set(
+                action.commentId,
+                cloneReplies(state.comments.get(action.commentId))
+            );
+            state.comments
+                .get(action.commentId)
+                .replies.set(
+                    action.replyId,
+                    update(
+                        state.comments
+                            .get(action.commentId)
+                            .replies.get(action.replyId),
+                        action.update
+                    )
+                );
             break;
 
         case actions.DELETE_REPLY:
             if (!state.comments.has(action.commentId)) {
                 break;
             }
-            if (!state.comments.get(action.commentId).replies.has(action.replyId)) {
+            if (
+                !state.comments
+                    .get(action.commentId)
+                    .replies.has(action.replyId)
+            ) {
                 break;
             }
             state = cloneComments(state);
-            state.comments.set(action.commentId, cloneReplies(
-                state.comments.get(action.commentId)
-            ));
+            state.comments.set(
+                action.commentId,
+                cloneReplies(state.comments.get(action.commentId))
+            );
             state.comments.get(action.commentId).replies.delete(action.replyId);
             break;
-
     }
 
     return state;

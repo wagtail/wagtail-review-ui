@@ -110,7 +110,9 @@ export class AnnotatableSection {
         }
 
         // Hide by default
-        highlights.forEach(highlight => highlight.classList.add('annotator-hl--hidden'));
+        highlights.forEach(highlight =>
+            highlight.classList.add('annotator-hl--hidden')
+        );
 
         // This is called when this comment is deleted by a used
         let onDelete = () => {
@@ -119,27 +121,35 @@ export class AnnotatableSection {
 
         // These two are called by main.tsx when the corresponding comment has been focused/unfocused
         let onFocus = () => {
-            highlights.forEach(highlight => highlight.classList.add('annotator-hl--focused'));
+            highlights.forEach(highlight =>
+                highlight.classList.add('annotator-hl--focused')
+            );
         };
 
         let onUnfocus = () => {
-            highlights.forEach(highlight => highlight.classList.remove('annotator-hl--focused'));
+            highlights.forEach(highlight =>
+                highlight.classList.remove('annotator-hl--focused')
+            );
         };
 
         // This is called to register a callback so the corresponding comment can be focused when the highlight is clicked
         let setOnClickHandler = (
             handler: (this: GlobalEventHandlers, ev: MouseEvent) => any
         ) => {
-            highlights.forEach(highlight => highlight.onclick = handler);
+            highlights.forEach(highlight => (highlight.onclick = handler));
         };
 
         // These are called whenever the comments are mounted/unmounted from the DOM
         let show = () => {
-            highlights.forEach(highlight => highlight.classList.remove('annotator-hl--hidden'));
+            highlights.forEach(highlight =>
+                highlight.classList.remove('annotator-hl--hidden')
+            );
         };
 
         let hide = () => {
-            highlights.forEach(highlight => highlight.classList.add('annotator-hl--hidden'));
+            highlights.forEach(highlight =>
+                highlight.classList.add('annotator-hl--hidden')
+            );
         };
 
         return {

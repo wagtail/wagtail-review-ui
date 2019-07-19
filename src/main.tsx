@@ -12,11 +12,9 @@ import {
     Comment,
     authorFromApi,
     newCommentReply,
-    newComment,
+    newComment
 } from './state/comments';
-import {
-    ModerationState,
-} from './state/moderation';
+import { ModerationState } from './state/moderation';
 import {
     addComment,
     addReply,
@@ -149,7 +147,9 @@ export function initCommentsApp(
 
     let render = () => {
         let state = store.getState();
-        let commentList: Comment[] = Array.from(state.comments.comments.values());
+        let commentList: Comment[] = Array.from(
+            state.comments.comments.values()
+        );
 
         // Check if the focused comment has changed
         if (state.comments.focusedComment != focusedComment) {
@@ -159,13 +159,17 @@ export function initCommentsApp(
                 // don't worry about unfocusing the annotation as that will be
                 // deleted
                 if (state.comments.comments.has(focusedComment)) {
-                    state.comments.comments.get(focusedComment).annotation.onUnfocus();
+                    state.comments.comments
+                        .get(focusedComment)
+                        .annotation.onUnfocus();
                 }
             }
 
             // Focus the new focused annotation
             if (state.comments.focusedComment) {
-                state.comments.comments.get(state.comments.focusedComment).annotation.onFocus();
+                state.comments.comments
+                    .get(state.comments.focusedComment)
+                    .annotation.onFocus();
             }
 
             focusedComment = state.comments.focusedComment;

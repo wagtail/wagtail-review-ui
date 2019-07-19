@@ -1,6 +1,4 @@
-import {
-    SettingsStateUpdate,
-} from '../state/settings';
+import { SettingsStateUpdate } from '../state/settings';
 
 export const UPDATE_GLOBAL_SETTINGS = 'update-global-settings';
 

@@ -51,7 +51,10 @@ export class LayoutController {
         // Get average position
         const sumOfPositions = annotation.highlights
             .map(highlight => {
-                return highlight.getBoundingClientRect().top + document.documentElement.scrollTop;
+                return (
+                    highlight.getBoundingClientRect().top +
+                    document.documentElement.scrollTop
+                );
             })
             .reduce((sum, position) => {
                 return sum + position;
@@ -76,17 +79,19 @@ export class LayoutController {
         }
 
         // Build list of blocks (starting with one for each comment)
-        let blocks: Block[] = Array.from(this.commentElements.keys()).map(commentId => {
-            return {
-                position: this.commentDesiredPositions.get(commentId),
-                height: this.commentHeights.get(commentId),
-                comments: [commentId],
-                containsPinnedComment:
-                    this.pinnedComment !== null &&
-                    commentId == this.pinnedComment,
-                pinnedCommentPosition: 0
-            };
-        });
+        let blocks: Block[] = Array.from(this.commentElements.keys()).map(
+            commentId => {
+                return {
+                    position: this.commentDesiredPositions.get(commentId),
+                    height: this.commentHeights.get(commentId),
+                    comments: [commentId],
+                    containsPinnedComment:
+                        this.pinnedComment !== null &&
+                        commentId == this.pinnedComment,
+                    pinnedCommentPosition: 0
+                };
+            }
+        );
 
         // Sort blocks
         blocks.sort((a, b) => a.position - b.position);
@@ -98,56 +103,59 @@ export class LayoutController {
             let newBlocks: Block[] = [];
             let previousBlock: Block | null = null;
 
-            blocks = blocks.map(block => {
-                if (previousBlock) {
-                    if (
-                        previousBlock.position + previousBlock.height + GAP >
-                        block.position
-                    ) {
-                        overlaps = true;
-
-                        // Merge the blocks
-                        previousBlock.comments.push(...block.comments);
-
-                        if (block.containsPinnedComment) {
-                            previousBlock.containsPinnedComment = true;
-                            previousBlock.pinnedCommentPosition =
-                                block.pinnedCommentPosition +
-                                previousBlock.height;
-                        }
-                        previousBlock.height += block.height;
-
-                        // Make sure comments don't disappear off the top of the page
-                        // But only if a comment isn't focused
+            blocks = blocks
+                .map(block => {
+                    if (previousBlock) {
                         if (
-                            !this.pinnedComment &&
-                            previousBlock.position < TOP_MARGIN + OFFSET
+                            previousBlock.position +
+                                previousBlock.height +
+                                GAP >
+                            block.position
                         ) {
-                            previousBlock.position =
-                                TOP_MARGIN + previousBlock.height - OFFSET;
-                        }
+                            overlaps = true;
 
-                        // If this block contains the focused comment, position it so
-                        // the focused comment is in it's desired position
-                        if (
-                            this.pinnedComment !== null &&
-                            previousBlock.containsPinnedComment
-                        ) {
-                            previousBlock.position =
-                                this.commentDesiredPositions.get(
-                                    this.pinnedComment
-                                ) - previousBlock.pinnedCommentPosition;
-                        }
+                            // Merge the blocks
+                            previousBlock.comments.push(...block.comments);
 
-                        // Remove block
-                        return null;
+                            if (block.containsPinnedComment) {
+                                previousBlock.containsPinnedComment = true;
+                                previousBlock.pinnedCommentPosition =
+                                    block.pinnedCommentPosition +
+                                    previousBlock.height;
+                            }
+                            previousBlock.height += block.height;
+
+                            // Make sure comments don't disappear off the top of the page
+                            // But only if a comment isn't focused
+                            if (
+                                !this.pinnedComment &&
+                                previousBlock.position < TOP_MARGIN + OFFSET
+                            ) {
+                                previousBlock.position =
+                                    TOP_MARGIN + previousBlock.height - OFFSET;
+                            }
+
+                            // If this block contains the focused comment, position it so
+                            // the focused comment is in it's desired position
+                            if (
+                                this.pinnedComment !== null &&
+                                previousBlock.containsPinnedComment
+                            ) {
+                                previousBlock.position =
+                                    this.commentDesiredPositions.get(
+                                        this.pinnedComment
+                                    ) - previousBlock.pinnedCommentPosition;
+                            }
+
+                            // Remove block
+                            return null;
+                        }
                     }
-                }
 
-                previousBlock = block;
-                return block;
-            })
-            .filter(block => block === null);
+                    previousBlock = block;
+                    return block;
+                })
+                .filter(block => block === null);
 
             blocks = newBlocks;
         }

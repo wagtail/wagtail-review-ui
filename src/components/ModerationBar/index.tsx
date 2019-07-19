@@ -8,7 +8,11 @@ import {
 } from '../../state/moderation';
 import APIClient from '../../api';
 
-import { updateModerationState, setErrors, clearError } from '../../actions/moderation';
+import {
+    updateModerationState,
+    setErrors,
+    clearError
+} from '../../actions/moderation';
 
 interface ModerationBarProps extends ModerationState {
     store: Store;
@@ -41,7 +45,6 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             return errors.size == 0;
         };
 
-
         let setStatusOnChange = (status: ModerationStatus) => {
             return (e: React.ChangeEvent<HTMLInputElement>) => {
                 e.preventDefault();
@@ -59,11 +62,17 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                 updateModerationState({ comment: e.target.value })
             );
 
-            if (e.target.value.length > 0 && 'comment-required' in this.props.errors) {
+            if (
+                e.target.value.length > 0 &&
+                'comment-required' in this.props.errors
+            ) {
                 this.props.store.dispatch(clearError('comment-required'));
             }
 
-            if (e.target.value.length <= 200 && 'comment-too-long' in this.props.errors) {
+            if (
+                e.target.value.length <= 200 &&
+                'comment-too-long' in this.props.errors
+            ) {
                 this.props.store.dispatch(clearError('comment-too-long'));
             }
         };

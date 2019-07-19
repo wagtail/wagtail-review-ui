@@ -3,7 +3,12 @@ import * as ReactDOM from 'react-dom';
 import * as dateFormat from 'dateformat';
 
 import { Store } from '../../state';
-import { Author, Comment, authorFromApi, newCommentReply } from '../../state/comments';
+import {
+    Author,
+    Comment,
+    authorFromApi,
+    newCommentReply
+} from '../../state/comments';
 import {
     updateComment,
     deleteComment,
