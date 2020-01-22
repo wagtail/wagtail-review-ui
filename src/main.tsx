@@ -131,11 +131,6 @@ export function initCommentsApp(
         );
     });
 
-    if (moderationEnabled) {
-        // Launch moderation lock coroutine
-        moderationLockCoroutine(api);
-    }
-
     // Check if there is "comment" query parameter.
     // If this is set, the user has clicked on a "View on frontend" link of an
     // individual comment. We should focus this comment and scroll to it
