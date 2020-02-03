@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Store } from '../../state';
 import {
     ModerationState,
-    ModerationStatus,
+    ModerationTaskAction,
     ModerationErrorCode
 } from '../../state/moderation';
 import APIClient from '../../api';
@@ -21,15 +21,15 @@ interface ModerationBarProps extends ModerationState {
 
 export default class ModerationBar extends React.Component<ModerationBarProps> {
     renderModal() {
-        if (!this.props.statusBoxOpen) {
+        if (!this.props.actionBoxOpen) {
             return <></>;
         }
 
         let validate = (): boolean => {
             let errors: Set<ModerationErrorCode> = new Set();
 
-            if (this.props.status === null) {
-                errors.add('status-required');
+            if (this.props.taskAction === null) {
+                errors.add('action-required');
             }
 
             if (this.props.comment.length == 0) {
@@ -45,13 +45,13 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             return errors.size == 0;
         };
 
-        let setStatusOnChange = (status: ModerationStatus) => {
+        let setTaskActionOnChange = (taskAction: ModerationTaskAction) => {
             return (e: React.ChangeEvent<HTMLInputElement>) => {
                 e.preventDefault();
-                this.props.store.dispatch(updateModerationState({ status }));
+                this.props.store.dispatch(updateModerationState({ taskAction }));
 
-                if (status !== null && 'status-required' in this.props.errors) {
-                    this.props.store.dispatch(clearError('status-required'));
+                if (taskAction !== null && 'action-required' in this.props.errors) {
+                    this.props.store.dispatch(clearError('action-required'));
                 }
             };
         };
@@ -86,13 +86,13 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
 
             this.props.store.dispatch(
                 updateModerationState({
-                    statusBoxOpen: false,
+                    actionBoxOpen: false,
                     submitStage: 'submitting'
                 })
             );
 
             await this.props.api.submitModerationResponse(
-                this.props.status,
+                this.props.taskAction,
                 this.props.comment
             );
 
@@ -102,9 +102,9 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             );
         };
 
-        let statusErrors = <></>;
-        if (this.props.errors.has('status-required')) {
-            statusErrors = <div className="error">This field is required.</div>;
+        let actionErrors = <></>;
+        if (this.props.errors.has('action-required')) {
+            actionErrors = <div className="error">This field is required.</div>;
         }
 
         let reasonErrors = <></>;
@@ -121,33 +121,33 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         return (
             <div className="moderation-bar__modal">
                 <div
-                    className="status"
-                    data-error={this.props.errors.has('status-required')}
+                    className="action"
+                    data-error={this.props.errors.has('action-required')}
                 >
-                    <p>Please select a status</p>
+                    <p>Please select an action</p>
                     <input
                         type="radio"
-                        id="approved"
-                        checked={this.props.status === 'approved'}
-                        onChange={setStatusOnChange('approved')}
+                        id="approve"
+                        checked={this.props.taskAction === 'approve'}
+                        onChange={setTaskActionOnChange('approve')}
                     />
-                    <label htmlFor="approved">Approved</label>
+                    <label htmlFor="approved">Approve</label>
                     <input
                         type="radio"
-                        id="needs-changes"
-                        checked={this.props.status === 'needs-changes'}
-                        onChange={setStatusOnChange('needs-changes')}
+                        id="reject"
+                        checked={this.props.taskAction === 'reject'}
+                        onChange={setTaskActionOnChange('reject')}
                     />
-                    <label htmlFor="needs-changes">Needs changes</label>
+                    <label htmlFor="reject">Reject</label>
 
-                    {statusErrors}
+                    {actionErrors}
                 </div>
 
                 <div
                     className="reason"
-                    data-error={this.props.errors.has('status-required')}
+                    data-error={this.props.errors.has('action-required')}
                 >
-                    <p>Please give a reason for this status</p>
+                    <p>Please give a reason for this action</p>
 
                     <textarea
                         name="comment"
@@ -167,12 +167,12 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
     }
 
     render() {
-        let toggleStatusBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+        let toggleActionBox = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
 
             this.props.store.dispatch(
                 updateModerationState({
-                    statusBoxOpen: !this.props.statusBoxOpen
+                    actionBoxOpen: !this.props.actionBoxOpen
                 })
             );
         };
@@ -183,7 +183,7 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             reviewButton = (
                 <>
                     <span>Review</span>
-                    <button className="btn" onClick={toggleStatusBox}>
+                    <button className="btn" onClick={toggleActionBox}>
                         +
                     </button>
                 </>

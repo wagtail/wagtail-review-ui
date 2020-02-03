@@ -4,9 +4,9 @@ type Partial<T> = {
     [P in keyof T]?: T[P];
 };
 
-export type ModerationStatus = 'approved' | 'needs-changes' | null;
+export type ModerationTaskAction = 'approve' | 'reject' | null;
 export type ModerationErrorCode =
-    | 'status-required'
+    | 'action-required'
     | 'comment-required'
     | 'comment-too-long'
     | null;
@@ -17,8 +17,8 @@ export type ModerationSubmitStage =
     | 'submitted';
 
 export interface ModerationState {
-    statusBoxOpen: boolean;
-    status: ModerationStatus;
+    actionBoxOpen: boolean;
+    taskAction: ModerationTaskAction;
     comment: string;
     errors: Set<ModerationErrorCode>;
     submitStage: ModerationSubmitStage;
@@ -28,8 +28,8 @@ export type ModerationStateUpdate = Partial<ModerationState>;
 
 function initialState(): ModerationState {
     return {
-        statusBoxOpen: false,
-        status: null,
+        actionBoxOpen: false,
+        taskAction: null,
         comment: '',
         errors: new Set(),
         submitStage: 'not-submitted'

@@ -91,20 +91,6 @@ function renderCommentsUi(
     );
 }
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function moderationLockCoroutine(api: APIClient) {
-    // A coroutine that pings the "ExtendModerationLock" endpoint every 45 seconds
-    // while the browser window is open
-
-    while (true) {
-        await api.extendModerationLock();
-        await sleep(1000 * 45);
-    }
-}
-
 export function initCommentsApp(
     element: HTMLElement,
     api: APIClient,
