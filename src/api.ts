@@ -1,5 +1,5 @@
 import { Comment, CommentReply } from './state/comments';
-import { ModerationStatus } from './state/moderation';
+import { ModerationTaskAction } from './state/moderation';
 
 export interface ReviewerApi {
     id: number;
@@ -36,7 +36,7 @@ export interface CommentApi {
 }
 
 export interface ModerationRespondApi {
-    status: ModerationStatus;
+    taskAction: ModerationTaskAction;
     comment: string;
 }
 
@@ -203,7 +203,7 @@ export default class APIClient {
         });
     }
 
-    async submitModerationResponse(status: ModerationStatus, comment: string) {
+    async submitModerationResponse(taskAction: ModerationTaskAction, comment: string) {
         await fetch(`${this.baseUrl}respond/`, {
             method: 'POST',
             headers: {
@@ -211,7 +211,7 @@ export default class APIClient {
                 'X-Review-Token': this.reviewToken
             },
             body: JSON.stringify(<ModerationRespondApi>{
-                status,
+                taskAction,
                 comment
             })
         });
