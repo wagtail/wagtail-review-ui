@@ -38,6 +38,12 @@ export interface CommentReply {
     editPreviousText: string;
 }
 
+export interface NewReplyOptions {
+    remoteId?: number | null;
+    mode?: CommentReplyMode;
+    text?: string;
+}
+
 export function newCommentReply(
     localId: number,
     author: Author | null,
@@ -46,7 +52,7 @@ export function newCommentReply(
         remoteId = <number | null>null,
         mode = <CommentReplyMode>'default',
         text = ''
-    }
+    }: NewReplyOptions
 ): CommentReply {
     return {
         localId,
@@ -74,7 +80,7 @@ export type CommentMode =
 
 export interface Comment {
     localId: number;
-    annotation: Annotation;
+    annotation: Annotation | null;
     remoteId: number | null;
     mode: CommentMode;
     resolvedAt: number | null;
@@ -89,9 +95,17 @@ export interface Comment {
     resolvedThisSession: boolean;
 }
 
+export interface NewCommentOptions {
+    remoteId?: number | null;
+    mode?: CommentMode;
+    resolvedAt?: number | null;
+    text?: string;
+    replies?: Map<number, CommentReply>;
+}
+
 export function newComment(
     localId: number,
-    annotation: Annotation,
+    annotation: Annotation | null,
     author: Author | null,
     date: number,
     {
@@ -99,8 +113,8 @@ export function newComment(
         mode = <CommentMode>'default',
         resolvedAt = <number | null>null,
         text = '',
-        replies = new Map()
-    }
+        replies = <Map<number, CommentReply>>new Map()
+    }: NewCommentOptions
 ): Comment {
     return {
         localId,

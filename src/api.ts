@@ -84,6 +84,11 @@ export default class APIClient {
     }
 
     async saveComment(comment: Comment): Promise<CommentApi> {
+        if (!comment.annotation) {
+            // Comments viewed in storybook don't have annotations
+            throw new Error('Cannot submit comment without annotation.');
+        }
+
         let url = `${this.baseUrl}comments/`;
         let method = 'POST';
 
@@ -203,7 +208,10 @@ export default class APIClient {
         });
     }
 
-    async submitModerationResponse(taskAction: ModerationTaskAction, comment: string) {
+    async submitModerationResponse(
+        taskAction: ModerationTaskAction,
+        comment: string
+    ) {
         await fetch(`${this.baseUrl}respond/`, {
             method: 'POST',
             headers: {

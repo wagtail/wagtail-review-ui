@@ -48,9 +48,14 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         let setTaskActionOnChange = (taskAction: ModerationTaskAction) => {
             return (e: React.ChangeEvent<HTMLInputElement>) => {
                 e.preventDefault();
-                this.props.store.dispatch(updateModerationState({ taskAction }));
+                this.props.store.dispatch(
+                    updateModerationState({ taskAction })
+                );
 
-                if (taskAction !== null && 'action-required' in this.props.errors) {
+                if (
+                    taskAction !== null &&
+                    'action-required' in this.props.errors
+                ) {
                     this.props.store.dispatch(clearError('action-required'));
                 }
             };
