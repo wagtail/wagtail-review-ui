@@ -121,7 +121,10 @@ export default class CommentReplyComponent extends React.Component<
         let onCancel = (e: React.MouseEvent) => {
             e.preventDefault();
 
-            comment.annotation.onDelete();
+            if (comment.annotation) {
+                comment.annotation.onDelete();
+            }
+
             store.dispatch(
                 updateReply(comment.localId, reply.localId, {
                     mode: 'default',

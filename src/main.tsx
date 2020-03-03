@@ -140,17 +140,25 @@ export function initCommentsApp(
                 // don't worry about unfocusing the annotation as that will be
                 // deleted
                 if (state.comments.comments.has(focusedComment)) {
-                    state.comments.comments
-                        .get(focusedComment)
-                        .annotation.onUnfocus();
+                    const annotation = state.comments.comments.get(
+                        focusedComment
+                    ).annotation;
+
+                    if (annotation) {
+                        annotation.onUnfocus();
+                    }
                 }
             }
 
             // Focus the new focused annotation
             if (state.comments.focusedComment) {
-                state.comments.comments
-                    .get(state.comments.focusedComment)
-                    .annotation.onFocus();
+                const annotation = state.comments.comments.get(
+                    state.comments.focusedComment
+                ).annotation;
+
+                if (annotation) {
+                    annotation.onFocus();
+                }
             }
 
             focusedComment = state.comments.focusedComment;
