@@ -77,29 +77,21 @@ export interface CommentReplyProps {
     user: Author;
 }
 
-class CommentReplyHeader extends React.Component<CommentReplyProps> {
-    render() {
-        let { reply, user } = this.props;
-        return (
-            <div className="comment-reply__header">
-                <hr />
-                <div className="comment-reply__header-info">
-                    <h2>{reply.author ? reply.author.name : user.name}</h2>
-                    <p className="comment-reply__date">
-                        {dateFormat(reply.date, 'h:MM mmmm d')}
-                    </p>
-                </div>
-                <div className="comment-reply__header-actions">
-                    {this.props.children}
-                </div>
-            </div>
-        );
-    }
-}
-
 export default class CommentReplyComponent extends React.Component<
     CommentReplyProps
 > {
+    renderAuthorDate(): React.ReactFragment {
+        let { reply } = this.props;
+
+        let author = reply.author ? reply.author.name + ' -' : '';
+
+        return (
+            <p className="comment-reply__author-date">
+                {author} {dateFormat(reply.date, 'h:MM mmmm d')}
+            </p>
+        );
+    }
+
     renderEditing(): React.ReactFragment {
         let { comment, reply, store, api } = this.props;
 
@@ -121,30 +113,36 @@ export default class CommentReplyComponent extends React.Component<
         let onCancel = (e: React.MouseEvent) => {
             e.preventDefault();
 
-            if (comment.annotation) {
-                comment.annotation.onDelete();
-            }
-
             store.dispatch(
                 updateReply(comment.localId, reply.localId, {
                     mode: 'default',
-                    text: comment.editPreviousText
+                    text: reply.editPreviousText
                 })
             );
         };
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    <button onClick={onSave}>Save</button>
-                    <button onClick={onCancel}>Cancel</button>
-                </CommentReplyHeader>
                 <textarea
                     className="comment-reply__input"
                     value={reply.text}
                     onChange={onChangeText}
                     style={{ resize: 'none' }}
                 />
+                <div className="comment-reply__actions">
+                    <button
+                        className="comment-reply__button comment-reply__button--primary"
+                        onClick={onSave}
+                    >
+                        Save
+                    </button>
+                    <button
+                        className="comment-reply__button"
+                        onClick={onCancel}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </>
         );
     }
@@ -154,10 +152,9 @@ export default class CommentReplyComponent extends React.Component<
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    Saving...
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                <div className="comment-reply__progress">Saving...</div>
             </>
         );
     }
@@ -173,15 +170,17 @@ export default class CommentReplyComponent extends React.Component<
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    <span className="comment-reply__error">
-                        Save error{' '}
-                        <a href="#" onClick={onClickRetry}>
-                            Retry
-                        </a>
-                    </span>
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                <div className="comment-reply__error">
+                    Save error
+                    <button
+                        className="comment-reply__button"
+                        onClick={onClickRetry}
+                    >
+                        Retry
+                    </button>
+                </div>
             </>
         );
     }
@@ -207,18 +206,23 @@ export default class CommentReplyComponent extends React.Component<
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    <span className="comment-reply__confirm-delete">
-                        Are you sure?
-                    </span>
-                    <a href="#" onClick={onClickDelete}>
-                        Delete
-                    </a>
-                    <a href="#" onClick={onClickCancel}>
-                        Cancel
-                    </a>
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                <div className="comment-reply__confirm-delete">
+                    Are you sure?
+                    <button
+                        className="comment-reply__button comment-reply__button--red"
+                        onClick={onClickDelete}
+                    >
+                        Delete
+                    </button>
+                    <button
+                        className="comment-reply__button"
+                        onClick={onClickCancel}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </>
         );
     }
@@ -228,10 +232,9 @@ export default class CommentReplyComponent extends React.Component<
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    Deleting...
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                <div className="comment-reply__progress">Deleting...</div>
             </>
         );
     }
@@ -245,17 +248,35 @@ export default class CommentReplyComponent extends React.Component<
             await deleteCommentReply(comment, reply, store, api);
         };
 
+        let onClickCancel = async (e: React.MouseEvent) => {
+            e.preventDefault();
+
+            store.dispatch(
+                updateReply(comment.localId, reply.localId, {
+                    mode: 'default'
+                })
+            );
+        };
+
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    <span className="comment-reply__error">
-                        Delete error{' '}
-                        <a href="#" onClick={onClickRetry}>
-                            Retry
-                        </a>
-                    </span>
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                <div className="comment-reply__error">
+                    Delete error
+                    <button
+                        className="comment-reply__button"
+                        onClick={onClickCancel}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        className="comment-reply__button"
+                        onClick={onClickRetry}
+                    >
+                        Retry
+                    </button>
+                </div>
             </>
         );
     }
@@ -287,23 +308,28 @@ export default class CommentReplyComponent extends React.Component<
         let actions = <></>;
         if (reply.author == null || this.props.user.id === reply.author.id) {
             actions = (
-                <>
-                    <a href="#" onClick={onClickEdit}>
+                <div className="comment-reply__actions">
+                    <button
+                        className="comment-reply__button comment-reply__button--primary"
+                        onClick={onClickEdit}
+                    >
                         Edit
-                    </a>
-                    <a href="#" onClick={onClickDelete}>
+                    </button>
+                    <button
+                        className="comment-reply__button"
+                        onClick={onClickDelete}
+                    >
                         Delete
-                    </a>
-                </>
+                    </button>
+                </div>
             );
         }
 
         return (
             <>
-                <CommentReplyHeader {...this.props}>
-                    {actions}
-                </CommentReplyHeader>
                 <p className="comment-reply__text">{reply.text}</p>
+                {this.renderAuthorDate()}
+                {actions}
             </>
         );
     }
@@ -344,7 +370,7 @@ export default class CommentReplyComponent extends React.Component<
         return (
             <li
                 key={this.props.reply.localId}
-                className="comment-reply"
+                className={`comment-reply comment-reply--mode-${this.props.reply.mode}`}
                 data-reply-id={this.props.reply.localId}
             >
                 {inner}
