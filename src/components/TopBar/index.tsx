@@ -38,18 +38,28 @@ export default class TopBarComponent extends React.Component<TopBarProps> {
 
         return (
             <div className="comments-topbar">
-                Comments enabled{' '}
-                <input
-                    type="checkbox"
-                    onChange={onChangeCommentsEnabled}
-                    checked={commentsEnabled}
-                />
-                Show resolved comments{' '}
-                <input
-                    type="checkbox"
-                    onChange={onChangeShowResolvedComments}
-                    checked={showResolvedComments}
-                />
+                <ul className="comments-topbar__settings">
+                    <li>
+                        <input
+                            id="show-comments"
+                            type="checkbox"
+                            onChange={onChangeCommentsEnabled}
+                            checked={commentsEnabled}
+                        />
+                        <label htmlFor="show-comments">Show Comments</label>
+                    </li>
+                    <li>
+                        <input
+                            id="show-resolved-comments"
+                            type="checkbox"
+                            onChange={onChangeShowResolvedComments}
+                            checked={showResolvedComments}
+                        />
+                        <label htmlFor="show-resolved-comments">
+                            Show resolved Comments
+                        </label>
+                    </li>
+                </ul>
             </div>
         );
     }

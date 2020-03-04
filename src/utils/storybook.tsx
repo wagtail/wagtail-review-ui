@@ -24,6 +24,18 @@ import { getNextCommentId } from './sequences';
 import * as styles from '!css-to-string-loader!css-loader!sass-loader!./../main.scss';
 import CommentComponent from '../components/Comment/index';
 
+export function Styling() {
+    return (
+        <>
+            <link
+                href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
+                rel="stylesheet"
+            />
+            <style dangerouslySetInnerHTML={{ __html: styles }} />
+        </>
+    );
+}
+
 export function RenderCommentsForStorybook({
     store,
     author
@@ -67,11 +79,7 @@ export function RenderCommentsForStorybook({
 
     return (
         <>
-            <link
-                href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"
-                rel="stylesheet"
-            />
-            <style dangerouslySetInnerHTML={{ __html: styles }} />
+            <Styling />
             <ol className="comments-list">{commentsRendered}</ol>
         </>
     );
