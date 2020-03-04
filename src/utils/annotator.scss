@@ -77,14 +77,16 @@ $highlight-colour: rgb(0, 177, 179);
 }
 
 .annotator-adder::after {
-    color: #fff;
-    content: 'd';
-    font-family: wagtail;
-    font-size: 20px;
-    left: 8px;
+    content: '';
+    background-color: #eee;
+    mask-image: url('./pen-solid.svg');
+    mask-repeat: no-repeat;
     pointer-events: none;
     position: absolute;
-    top: 8px;
+    left: 9px;
+    top: 7px;
+    width: 20px;
+    height: 100%;
 }
 
 .annotator-editor .annotator-item:first-child textarea {
