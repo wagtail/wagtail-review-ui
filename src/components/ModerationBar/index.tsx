@@ -1,11 +1,7 @@
 import * as React from 'react';
 
 import { Store } from '../../state';
-import {
-    ModerationState,
-    ModerationTaskAction,
-    ModerationErrorCode
-} from '../../state/moderation';
+import { ModerationState, ModerationErrorCode } from '../../state/moderation';
 import APIClient from '../../api';
 
 import {
@@ -43,22 +39,6 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             this.props.store.dispatch(setErrors(errors));
 
             return errors.size == 0;
-        };
-
-        let setTaskActionOnChange = (taskAction: ModerationTaskAction) => {
-            return (e: React.ChangeEvent<HTMLInputElement>) => {
-                e.preventDefault();
-                this.props.store.dispatch(
-                    updateModerationState({ taskAction })
-                );
-
-                if (
-                    taskAction !== null &&
-                    'action-required' in this.props.errors
-                ) {
-                    this.props.store.dispatch(clearError('action-required'));
-                }
-            };
         };
 
         let onChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -123,27 +103,48 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             );
         }
 
+        const onChangeApprovalStatus = (
+            e: React.ChangeEvent<HTMLInputElement>
+        ) => {
+            e.preventDefault();
+
+            let taskAction: null | 'approve' | 'reject' = null;
+            if (e.target.value == 'approve') {
+                taskAction = 'approve';
+            } else if (e.target.value == 'reject') {
+                taskAction = 'reject';
+            }
+
+            this.props.store.dispatch(updateModerationState({ taskAction }));
+
+            if (taskAction !== null && 'action-required' in this.props.errors) {
+                this.props.store.dispatch(clearError('action-required'));
+            }
+        };
+
         return (
             <div className="moderation-bar__modal">
                 <div
                     className="action"
                     data-error={this.props.errors.has('action-required')}
                 >
-                    <p>Please select an action</p>
+                    <h3>Your Review</h3>
                     <input
                         type="radio"
                         id="approve"
+                        value="approve"
                         checked={this.props.taskAction === 'approve'}
-                        onChange={setTaskActionOnChange('approve')}
+                        onChange={onChangeApprovalStatus}
                     />
-                    <label htmlFor="approved">Approve</label>
+                    <label htmlFor="approve">Approved</label>
                     <input
                         type="radio"
                         id="reject"
+                        value="reject"
                         checked={this.props.taskAction === 'reject'}
-                        onChange={setTaskActionOnChange('reject')}
+                        onChange={onChangeApprovalStatus}
                     />
-                    <label htmlFor="reject">Reject</label>
+                    <label htmlFor="reject">Needs changes</label>
 
                     {actionErrors}
                 </div>
@@ -152,21 +153,27 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                     className="reason"
                     data-error={this.props.errors.has('action-required')}
                 >
-                    <p>Please give a reason for this action</p>
+                    <p>Please give a reason for this status</p>
 
                     <textarea
                         name="comment"
                         value={this.props.comment}
                         onChange={onChangeComment}
+                        placeholder="Enter your comments..."
                     ></textarea>
                     <small>200 character limit.</small>
 
                     {reasonErrors}
                 </div>
 
-                <button className="btn" onClick={onSubmit}>
+                <button
+                    className="moderation-bar__modal-button moderation-bar__modal-button--primary"
+                    onClick={onSubmit}
+                >
                     Submit Review
                 </button>
+
+                <div className="moderation-bar__arrow"></div>
             </div>
         );
     }
@@ -182,44 +189,16 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             );
         };
 
-        let reviewButton = <></>;
-
-        if (this.props.submitStage == 'not-submitted') {
-            reviewButton = (
-                <>
-                    <span>Review</span>
-                    <button className="btn" onClick={toggleActionBox}>
-                        +
-                    </button>
-                </>
-            );
-        } else if (this.props.submitStage == 'submitting') {
-            reviewButton = (
-                <>
-                    <span>Submitting...</span>
-                </>
-            );
-        } else if (this.props.submitStage == 'submitted') {
-            reviewButton = (
-                <>
-                    <span>Submitted!</span>
-                </>
-            );
-        } else if (this.props.submitStage == 'errored') {
-            // TODO
-            reviewButton = (
-                <>
-                    <span>Error</span>
-                    <a href="#">Retry</a>
-                </>
-            );
-        }
-
         return (
             <div className="moderation-bar">
                 {this.renderModal()}
 
-                <div className="moderation-bar__status">{reviewButton}</div>
+                <button
+                    className="moderation-bar__button"
+                    onClick={toggleActionBox}
+                >
+                    Submit your review
+                </button>
             </div>
         );
     }

@@ -73,10 +73,6 @@ export function RenderCommentsForStorybook({
         />
     ));
 
-    store.subscribe(() => {
-        setState(store.getState());
-    });
-
     return (
         <>
             <Styling />
