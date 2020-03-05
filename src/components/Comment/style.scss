@@ -1,16 +1,11 @@
-$background: #333;
-$textarea-background: #5b5b5b;
-
 .comment {
+    @include box;
+
     width: 100%;
     max-width: 350px;
     display: block;
-    background: $background;
     border-radius: 5px;
     transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
-    padding: 20px;
-    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.29);
-    font-size: 16px;
 
     &--mode-creating {
         padding: 10px;
@@ -46,22 +41,7 @@ $textarea-background: #5b5b5b;
     }
 
     &__button {
-        background-color: $background;
-        border: 1px solid #626262;
-        border-radius: 3px;
-        color: #fff;
-        cursor: pointer;
-        text-transform: uppercase;
-
-        &--primary {
-            border: 1px solid #007d7e;
-            background-color: #007d7e;
-        }
-
-        &--red {
-            border: 1px solid #901419;
-            background-color: #901419;
-        }
+        @include button;
     }
 
     &__actions,
@@ -188,7 +168,6 @@ $textarea-background: #5b5b5b;
         margin-top: 5px;
         padding: 10px;
         width: 100%;
-        background-color: $textarea-background;
         box-sizing: border-box;
         border-radius: 3px;
         color: #fff;

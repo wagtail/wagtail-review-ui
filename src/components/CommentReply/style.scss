@@ -28,22 +28,7 @@
     }
 
     &__button {
-        background-color: $background;
-        border: 1px solid #626262;
-        border-radius: 3px;
-        color: #fff;
-        cursor: pointer;
-        text-transform: uppercase;
-
-        &--primary {
-            border: 1px solid #007d7e;
-            background-color: #007d7e;
-        }
-
-        &--red {
-            border: 1px solid #901419;
-            background-color: #901419;
-        }
+        @include button;
     }
 
     &__actions,
