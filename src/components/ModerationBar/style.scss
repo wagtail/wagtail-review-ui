@@ -71,8 +71,10 @@
         box-shadow: 0 0 1px 0 #6bd6e6, 0 1px 10px 0 rgba(107, 214, 230, 0.7);
         cursor: pointer;
         padding: 16px;
+        padding-right: 16px + 25px;
         font-size: 12px;
         color: #007d7e;
+        position: relative;
 
         &:focus {
             @include focus-outline;
@@ -80,6 +82,18 @@
 
         &::-moz-focus-inner {
             border: 0;
+        }
+
+        &::after {
+            content: '';
+            background-color: #333;
+            mask-image: url('./components/ModerationBar/wagtail.svg');
+            mask-repeat: no-repeat;
+            position: absolute;
+            right: 9px;
+            top: 8px;
+            width: 28px;
+            height: 100%;
         }
     }
 
