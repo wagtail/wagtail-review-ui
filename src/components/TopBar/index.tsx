@@ -3,6 +3,8 @@ import * as React from 'react';
 import { Store } from '../../state';
 import { updateGlobalSettings } from '../../actions/settings';
 
+import Checkbox from '../widgets/Checkbox';
+
 export interface TopBarProps {
     store: Store;
 }
@@ -11,22 +13,18 @@ export default class TopBarComponent extends React.Component<TopBarProps> {
     render() {
         let { store } = this.props;
 
-        let onChangeCommentsEnabled = (
-            e: React.ChangeEvent<HTMLInputElement>
-        ) => {
+        let onChangeCommentsEnabled = (checked: boolean) => {
             store.dispatch(
                 updateGlobalSettings({
-                    commentsEnabled: e.target.checked
+                    commentsEnabled: checked
                 })
             );
         };
 
-        let onChangeShowResolvedComments = (
-            e: React.ChangeEvent<HTMLInputElement>
-        ) => {
+        let onChangeShowResolvedComments = (checked: boolean) => {
             store.dispatch(
                 updateGlobalSettings({
-                    showResolvedComments: e.target.checked
+                    showResolvedComments: checked
                 })
             );
         };
@@ -38,18 +36,24 @@ export default class TopBarComponent extends React.Component<TopBarProps> {
 
         return (
             <div className="comments-topbar">
-                Comments enabled{' '}
-                <input
-                    type="checkbox"
-                    onChange={onChangeCommentsEnabled}
-                    checked={commentsEnabled}
-                />
-                Show resolved comments{' '}
-                <input
-                    type="checkbox"
-                    onChange={onChangeShowResolvedComments}
-                    checked={showResolvedComments}
-                />
+                <ul className="comments-topbar__settings">
+                    <li>
+                        <Checkbox
+                            id="show-comments"
+                            label="Show comments"
+                            onChange={onChangeCommentsEnabled}
+                            checked={commentsEnabled}
+                        />
+                    </li>
+                    <li>
+                        <Checkbox
+                            id="show-resolved-comments"
+                            label="Show resolved comments"
+                            onChange={onChangeShowResolvedComments}
+                            checked={showResolvedComments}
+                        />
+                    </li>
+                </ul>
             </div>
         );
     }

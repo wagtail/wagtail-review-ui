@@ -1,12 +1,10 @@
 import * as React from 'react';
+import * as FocusTrap from 'focus-trap-react';
 
 import { Store } from '../../state';
-import {
-    ModerationState,
-    ModerationStatus,
-    ModerationErrorCode
-} from '../../state/moderation';
+import { ModerationState, ModerationErrorCode } from '../../state/moderation';
 import APIClient from '../../api';
+import Radio from '../widgets/Radio';
 
 import {
     updateModerationState,
@@ -20,16 +18,12 @@ interface ModerationBarProps extends ModerationState {
 }
 
 export default class ModerationBar extends React.Component<ModerationBarProps> {
-    renderModal() {
-        if (!this.props.statusBoxOpen) {
-            return <></>;
-        }
-
+    renderForm({submitErrored=false} = {}) {
         let validate = (): boolean => {
             let errors: Set<ModerationErrorCode> = new Set();
 
-            if (this.props.status === null) {
-                errors.add('status-required');
+            if (this.props.taskAction === null) {
+                errors.add('action-required');
             }
 
             if (this.props.comment.length == 0) {
@@ -43,17 +37,6 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             this.props.store.dispatch(setErrors(errors));
 
             return errors.size == 0;
-        };
-
-        let setStatusOnChange = (status: ModerationStatus) => {
-            return (e: React.ChangeEvent<HTMLInputElement>) => {
-                e.preventDefault();
-                this.props.store.dispatch(updateModerationState({ status }));
-
-                if (status !== null && 'status-required' in this.props.errors) {
-                    this.props.store.dispatch(clearError('status-required'));
-                }
-            };
         };
 
         let onChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -86,13 +69,12 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
 
             this.props.store.dispatch(
                 updateModerationState({
-                    statusBoxOpen: false,
                     submitStage: 'submitting'
                 })
             );
 
             await this.props.api.submitModerationResponse(
-                this.props.status,
+                this.props.taskAction,
                 this.props.comment
             );
 
@@ -102,50 +84,73 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             );
         };
 
-        let statusErrors = <></>;
-        if (this.props.errors.has('status-required')) {
-            statusErrors = <div className="error">This field is required.</div>;
+        let actionErrors = <></>;
+        if (this.props.errors.has('action-required')) {
+            actionErrors = <div className="moderation-bar__error">This field is required.</div>;
         }
 
         let reasonErrors = <></>;
         if (this.props.errors.has('comment-required')) {
-            reasonErrors = <div className="error">This field is required.</div>;
+            reasonErrors = <div className="moderation-bar__error">This field is required.</div>;
         } else if (this.props.errors.has('comment-too-long')) {
             reasonErrors = (
-                <div className="error">
+                <div className="moderation-bar__error">
                     This field is too long (200 characters maximum).
                 </div>
             );
         }
 
-        return (
-            <div className="moderation-bar__modal">
-                <div
-                    className="status"
-                    data-error={this.props.errors.has('status-required')}
-                >
-                    <p>Please select a status</p>
-                    <input
-                        type="radio"
-                        id="approved"
-                        checked={this.props.status === 'approved'}
-                        onChange={setStatusOnChange('approved')}
-                    />
-                    <label htmlFor="approved">Approved</label>
-                    <input
-                        type="radio"
-                        id="needs-changes"
-                        checked={this.props.status === 'needs-changes'}
-                        onChange={setStatusOnChange('needs-changes')}
-                    />
-                    <label htmlFor="needs-changes">Needs changes</label>
+        const onChangeApprovalStatus = (value: string) => {
+            let taskAction: null | 'approve' | 'reject' = null;
+            if (value == 'approve') {
+                taskAction = 'approve';
+            } else if (value == 'reject') {
+                taskAction = 'reject';
+            }
 
-                    {statusErrors}
+            this.props.store.dispatch(updateModerationState({ taskAction }));
+
+            if (taskAction !== null && 'action-required' in this.props.errors) {
+                this.props.store.dispatch(clearError('action-required'));
+            }
+        };
+
+        let submitError = <></>;
+        if (submitErrored) {
+            submitError = <div className="moderation-bar__error">Your review failed to submit due to a server error.</div>;
+        }
+
+        return (
+            <>
+                <div
+                    className="action"
+                    data-error={this.props.errors.has('action-required')}
+                >
+                    {submitError}
+                    <h3>Your Review</h3>
+                    <Radio
+                        id="approve"
+                        name="review-action"
+                        value="approve"
+                        label="Approved"
+                        checked={this.props.taskAction === 'approve'}
+                        onChange={onChangeApprovalStatus}
+                    />
+
+                    <Radio
+                        id="reject"
+                        name="review-action"
+                        value="reject"
+                        label="Needs changes"
+                        checked={this.props.taskAction === 'reject'}
+                        onChange={onChangeApprovalStatus}
+                    />
+                    {actionErrors}
                 </div>
 
                 <div
                     className="reason"
-                    data-error={this.props.errors.has('status-required')}
+                    data-error={this.props.errors.has('action-required')}
                 >
                     <p>Please give a reason for this status</p>
 
@@ -153,69 +158,113 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                         name="comment"
                         value={this.props.comment}
                         onChange={onChangeComment}
+                        placeholder="Enter your comments..."
                     ></textarea>
                     <small>200 character limit.</small>
 
                     {reasonErrors}
                 </div>
 
-                <button className="btn" onClick={onSubmit}>
+                <button
+                    className="moderation-bar__modal-button moderation-bar__modal-button--primary"
+                    onClick={onSubmit}
+                    type="submit"
+                >
                     Submit Review
                 </button>
+            </>
+        );
+    }
+
+    renderSubmitting() {
+        return (
+            <h3>Submitting your Review...</h3>
+        );
+    }
+
+
+    renderSubmitted() {
+        const closeTab = (e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+
+            this.props.store.dispatch(
+                updateModerationState({ actionBoxOpen: false })
+            );
+        };
+
+        return (
+            <>
+                <h3>Your review has been submitted!</h3>
+                <button onClick={closeTab} className="moderation-bar__modal-button moderation-bar__modal-button--primary">Close</button>
+            </>
+        );
+    }
+
+    renderModal() {
+        if (!this.props.actionBoxOpen) {
+            return <></>;
+        }
+
+        let modalContents = <></>;
+
+        switch (this.props.submitStage) {
+            case 'not-submitted':
+                modalContents = this.renderForm();
+                break;
+            case 'submitting':
+                modalContents = this.renderSubmitting();
+                break;
+            case 'errored':
+                modalContents = this.renderForm({submitErrored: true});
+                break;
+            case 'submitted':
+                modalContents = this.renderSubmitted();
+                break;
+        }
+
+        return (
+            <div
+                className="moderation-bar__modal"
+                aria-modal="true"
+            >
+                {modalContents}
+                <div className="moderation-bar__arrow"></div>
             </div>
         );
     }
 
     render() {
-        let toggleStatusBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+        let toggleActionBox = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
 
             this.props.store.dispatch(
                 updateModerationState({
-                    statusBoxOpen: !this.props.statusBoxOpen
+                    actionBoxOpen: !this.props.actionBoxOpen
                 })
             );
         };
 
-        let reviewButton = <></>;
-
-        if (this.props.submitStage == 'not-submitted') {
-            reviewButton = (
-                <>
-                    <span>Review</span>
-                    <button className="btn" onClick={toggleStatusBox}>
-                        +
-                    </button>
-                </>
+        const closeActionBox = () => {
+            this.props.store.dispatch(
+                updateModerationState({
+                    actionBoxOpen: false
+                })
             );
-        } else if (this.props.submitStage == 'submitting') {
-            reviewButton = (
-                <>
-                    <span>Submitting...</span>
-                </>
-            );
-        } else if (this.props.submitStage == 'submitted') {
-            reviewButton = (
-                <>
-                    <span>Submitted!</span>
-                </>
-            );
-        } else if (this.props.submitStage == 'errored') {
-            // TODO
-            reviewButton = (
-                <>
-                    <span>Error</span>
-                    <a href="#">Retry</a>
-                </>
-            );
-        }
+        };
 
         return (
-            <div className="moderation-bar">
-                {this.renderModal()}
+            <FocusTrap active={this.props.actionBoxOpen} focusTrapOptions={{onDeactivate: closeActionBox}}>
+                <div className="moderation-bar">
+                    {this.renderModal()}
 
-                <div className="moderation-bar__status">{reviewButton}</div>
-            </div>
+                    <button
+                        className="moderation-bar__button"
+                        onClick={toggleActionBox}
+                    >
+                        Submit your review
+                    </button>
+                </div>
+            </FocusTrap>
         );
     }
 }

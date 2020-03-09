@@ -91,20 +91,6 @@ function renderCommentsUi(
     );
 }
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function moderationLockCoroutine(api: APIClient) {
-    // A coroutine that pings the "ExtendModerationLock" endpoint every 45 seconds
-    // while the browser window is open
-
-    while (true) {
-        await api.extendModerationLock();
-        await sleep(1000 * 45);
-    }
-}
-
 export function initCommentsApp(
     element: HTMLElement,
     api: APIClient,
@@ -131,11 +117,6 @@ export function initCommentsApp(
         );
     });
 
-    if (moderationEnabled) {
-        // Launch moderation lock coroutine
-        moderationLockCoroutine(api);
-    }
-
     // Check if there is "comment" query parameter.
     // If this is set, the user has clicked on a "View on frontend" link of an
     // individual comment. We should focus this comment and scroll to it
@@ -159,17 +140,25 @@ export function initCommentsApp(
                 // don't worry about unfocusing the annotation as that will be
                 // deleted
                 if (state.comments.comments.has(focusedComment)) {
-                    state.comments.comments
-                        .get(focusedComment)
-                        .annotation.onUnfocus();
+                    const annotation = state.comments.comments.get(
+                        focusedComment
+                    ).annotation;
+
+                    if (annotation) {
+                        annotation.onUnfocus();
+                    }
                 }
             }
 
             // Focus the new focused annotation
             if (state.comments.focusedComment) {
-                state.comments.comments
-                    .get(state.comments.focusedComment)
-                    .annotation.onFocus();
+                const annotation = state.comments.comments.get(
+                    state.comments.focusedComment
+                ).annotation;
+
+                if (annotation) {
+                    annotation.onFocus();
+                }
             }
 
             focusedComment = state.comments.focusedComment;

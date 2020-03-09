@@ -1,3 +1,96 @@
+$background: #333;
+$textarea-background: #5b5b5b;
+
+$color-teal: #007d7e;
+$color-teal-darker: darken(adjust-hue($color-teal, 1), 4);
+$color-teal-dark: darken(adjust-hue($color-teal, 1), 7);
+
+$color-blue: #71b2d4;
+$color-red: #cd3238;
+$color-red-dark: #b4191f;
+$color-orange: #e9b04d;
+$color-orange-dark: #bb5b03;
+$color-green: #189370;
+$color-green-dark: #157b57;
+$color-salmon: #f37e77;
+$color-salmon-light: #fcf2f2;
+$color-white: #fff;
+$color-black: #000;
+
+// darker to lighter
+$color-grey-1: darken($color-white, 80);
+$color-grey-2: darken($color-white, 70);
+$color-grey-3: darken($color-white, 15);
+$color-grey-4: darken($color-white, 10);
+$color-grey-5: darken($color-white, 2);
+
+$color-fieldset-hover: $color-grey-5;
+$color-input-border: $color-grey-4;
+$color-input-focus: lighten(desaturate($color-teal, 40), 72);
+$color-input-focus-border: lighten(saturate($color-teal, 12), 10);
+$color-input-error-bg: lighten(saturate($color-red, 28), 45);
+
+$color-link: $color-teal-darker;
+$color-link-hover: $color-teal-dark;
+
+// The focus outline color is defined without reusing a named color variable
+// because it shouldn’t be reused for anything else in the UI.
+$color-focus-outline: #ffbf47;
+
+$color-text-base: darken($color-white, 85);
+$color-text-input: darken($color-white, 90);
+
+// Color states
+$color-state-live: #59b524;
+$color-state-draft: #808080;
+$color-state-absent: #ff8f11;
+$color-state-live-draft: #43b1b0;
+
+@mixin focus-outline {
+    outline: $color-focus-outline auto 3px;
+}
+
+@mixin box {
+    background-color: $background;
+    padding: 20px;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.29);
+    font-size: 16px;
+    border-radius: 3px;
+    color: #fff;
+
+    textarea {
+        background-color: $textarea-background;
+    }
+
+    *:focus {
+        @include focus-outline;
+    }
+}
+
+@mixin button {
+    background-color: inherit;
+    border: 1px solid #626262;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+
+    &--primary {
+        border: 1px solid #007d7e;
+        background-color: #007d7e;
+    }
+
+    &--red {
+        border: 1px solid #901419;
+        background-color: #901419;
+    }
+
+    // Disable Firefox's focus styling becase we add our own.
+    &::-moz-focus-inner {
+        border: 0;
+    }
+}
+
 .comments-list {
     height: 100%;
     width: 400px;
@@ -12,3 +105,5 @@
 @import 'components/CommentReply/style.scss';
 @import 'components/ModerationBar/style.scss';
 @import 'components/TopBar/style.scss';
+@import 'components/widgets/Checkbox/style.scss';
+@import 'components/widgets/Radio/style.scss';

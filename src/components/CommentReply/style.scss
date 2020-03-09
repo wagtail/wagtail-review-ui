@@ -1,60 +1,104 @@
 .comment-reply {
-    &__header {
-        font-size: 1.2rem;
+    margin-top: 20px;
+    border-left: 5px solid #5b5b5b;
+    padding-left: 7px;
 
-        hr {
-            background-color: #ccc;
-            margin-top: 0;
-            margin-bottom: 0;
-            margin-left: 10px;
-            margin-right: 10px;
-            border: 0;
-            height: 2px;
-        }
-    }
+    &__text {
+        color: #fff;
+        font-size: 1em;
+        font-weight: bold;
+        margin-top: 12px;
+        margin-bottom: 0px;
 
-    &__date {
-        font-size: 1.2rem;
-        color: #555;
-        margin: 0;
-    }
-
-    &__header-info {
-        float: left;
-        padding: 10px;
-
-        h2 {
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
-    }
-
-    &__header-actions {
-        float: right;
-        padding: 10px;
-
-        > a {
-            display: inline-block;
-            padding-right: 4px;
-
+        &--mode-deleting {
             color: #333;
         }
     }
 
-    &__confirm-delete {
+    &__author-date {
+        color: #fff;
+        font-size: 0.8em;
+        margin-top: 0px;
+        margin-bottom: 12px;
+    }
+
+    &--mode-deleting &__text,
+    &--mode-deleting &__author-date {
+        color: #999;
+    }
+
+    &__button {
+        @include button;
+    }
+
+    &__actions,
+    &__confirm-delete,
+    &__progress {
+        height: 30px;
+    }
+
+    &__actions &__button,
+    &__confirm-delete &__button {
+        height: 26px;
+        margin-right: 5px;
+        padding: 6px;
+        padding-bottom: 4px;
+        padding-left: 9px;
+        padding-right: 9px;
+        margin-top: 5px;
         margin-right: 5px;
     }
 
+    &__confirm-delete,
     &__error {
-        color: red;
+        color: #fff;
         font-weight: bold;
+        font-size: 0.8em;
+
+        button {
+            margin-left: 5px;
+            margin-right: 0px;
+        }
     }
 
-    &__text {
-        clear: both;
-        padding-left: 20px;
-        padding-bottom: 10px;
+    &__error {
+        background-color: #b4191f;
+        border-radius: 3px;
+        padding: 5px;
+
+        button {
+            float: right;
+            margin-left: 5px;
+            background-color: #901419;
+            border-color: #901419;
+            padding: 2px;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+    }
+
+    &__progress {
+        color: #fff;
+        font-weight: bold;
+        font-size: 0.8em;
+    }
+
+    textarea {
+        font-family: 'Open Sans', sans-serif;
+        border: none;
         margin: 0;
+        margin-top: 5px;
+        padding: 10px;
+        width: 100%;
+        background-color: $textarea-background;
+        box-sizing: border-box;
+        border-radius: 3px;
+        color: #fff;
+
+        &::placeholder {
+            font-style: italic;
+        }
     }
 }
