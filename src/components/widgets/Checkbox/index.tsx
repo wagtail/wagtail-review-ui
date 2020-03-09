@@ -10,8 +10,6 @@ export interface CheckboxProps {
 
 const Checkbox = (props: CheckboxProps) => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-
         if (props.onChange) {
             props.onChange(e.target.checked);
         }

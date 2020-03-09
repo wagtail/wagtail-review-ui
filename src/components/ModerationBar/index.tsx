@@ -106,8 +106,6 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         const onChangeApprovalStatus = (
             e: React.ChangeEvent<HTMLInputElement>
         ) => {
-            e.preventDefault();
-
             let taskAction: null | 'approve' | 'reject' = null;
             if (e.target.value == 'approve') {
                 taskAction = 'approve';
