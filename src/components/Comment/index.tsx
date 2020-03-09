@@ -20,6 +20,7 @@ import APIClient from '../../api';
 import { LayoutController } from '../../utils/layout';
 import { getNextReplyId } from '../../utils/sequences';
 import CommentReplyComponent, { saveCommentReply } from '../CommentReply';
+import Checkbox from '../widgets/Checkbox';
 
 async function saveComment(comment: Comment, store: Store, api: APIClient) {
     store.dispatch(
@@ -310,16 +311,12 @@ export default class CommentComponent extends React.Component<CommentProps> {
                         Cancel
                     </button>
                     <div className="comment__resolved">
-                        <input
+                        <Checkbox
                             id={`comment-${comment.localId}-resolved`}
-                            name="resolved"
-                            type="checkbox"
+                            label="Resolved"
                             checked={comment.resolvedAt !== null}
                             disabled={true}
                         />
-                        <label htmlFor={`comment-${comment.localId}-resolved`}>
-                            Resolved
-                        </label>
                     </div>
                 </div>
                 {this.renderReplies({ hideNewReply: true })}
@@ -478,12 +475,8 @@ export default class CommentComponent extends React.Component<CommentProps> {
             );
         };
 
-        let changeResolved = async (e: React.ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault();
-
-            let resolvedAt = e.target.checked
-                ? comment.resolvedAt || Date.now()
-                : null;
+        let changeResolved = async (checked: boolean) => {
+            let resolvedAt = checked ? comment.resolvedAt || Date.now() : null;
 
             store.dispatch(
                 updateComment(comment.localId, {
@@ -529,16 +522,12 @@ export default class CommentComponent extends React.Component<CommentProps> {
                 <div className="comment__actions">
                     {actions}
                     <div className="comment__resolved">
-                        <input
+                        <Checkbox
                             id={`comment-${comment.localId}-resolved`}
-                            name={`comment-${comment.localId}-resolved`}
-                            type="checkbox"
-                            onChange={changeResolved}
+                            label="Resolved"
                             checked={comment.resolvedAt !== null}
+                            onChange={changeResolved}
                         />
-                        <label htmlFor={`comment-${comment.localId}-resolved`}>
-                            Resolved
-                        </label>
                     </div>
                 </div>
                 {this.renderReplies()}
