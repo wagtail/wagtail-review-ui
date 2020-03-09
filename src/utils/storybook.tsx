@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import APIClient from '../api';
 
-import { Store } from '../state';
+import { Store, Context } from '../state';
 import {
     addComment,
     setFocusedComment,
@@ -36,27 +36,15 @@ export function Styling() {
     );
 }
 
-export function RenderCommentsForStorybook({
-    store,
-    author
-}: {
-    store: Store;
-    author?: Author;
-}) {
-    let [state, setState] = React.useState(store.getState());
-    store.subscribe(() => {
-        setState(store.getState());
-    });
-
-    let layout = new LayoutController();
+export function RenderCommentsForStorybook() {
+    const { store, storeState: state } = React.useContext(Context)
+    const [layout] = React.useState(new LayoutController());
     const api = new APIClient('http://wagtail.io', 'dummy-review-token');
 
-    if (!author) {
-        author = authorFromApi({
-            id: 1,
-            name: 'Admin'
-        });
-    }
+    const author = authorFromApi({
+        id: 1,
+        name: 'Admin'
+    });
 
     let commentsToRender: Comment[] = Array.from(
         state.comments.comments.values()

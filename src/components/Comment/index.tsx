@@ -452,7 +452,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     }
 
     renderDefault(): React.ReactFragment {
-        let { comment, store, api } = this.props;
+        let { comment, store } = this.props;
 
         let onClickEdit = async (e: React.MouseEvent) => {
             e.preventDefault();
@@ -485,14 +485,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
                     resolvedThisSession: true
                 })
             );
-
+/*
             await api.saveCommentResolvedStatus(comment, resolvedAt !== null);
 
             store.dispatch(
                 updateComment(comment.localId, {
                     updatingResolvedStatus: false
                 })
-            );
+            );*/
         };
 
         let actions = <></>;
@@ -514,6 +514,8 @@ export default class CommentComponent extends React.Component<CommentProps> {
                 </>
             );
         }
+
+        console.log("IS CHECKED", comment.resolvedAt !== null)
 
         return (
             <>

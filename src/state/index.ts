@@ -1,4 +1,6 @@
-import { combineReducers, Store } from 'redux';
+import * as React from 'react';
+import { combineReducers, Store as ReduxStore } from 'redux';
+import { ReactReduxContextValue } from 'react-redux';
 
 import { reducer as commentsReducer, CommentsState } from './comments';
 import { reducer as moderationReducer, ModerationState } from './moderation';
@@ -17,4 +19,5 @@ export let reducer = combineReducers({
     settings: settingsReducer
 });
 
-export type Store = Store<State, Action>;
+export type Store = ReduxStore<State, Action>;
+export const Context = React.createContext<ReactReduxContextValue<State, Action>>(null);

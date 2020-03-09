@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStore } from 'redux';
 
-import { Store, reducer } from '../../state';
+import { Store, reducer, Context } from '../../state';
 import { authorFromApi } from '../../state/comments';
 
 import {
@@ -19,7 +19,11 @@ export function addNewComment() {
         focused: true
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function comment() {
@@ -30,7 +34,11 @@ export function comment() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function commentFromSomeoneElse() {
@@ -45,7 +53,11 @@ export function commentFromSomeoneElse() {
         })
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function focused() {
@@ -57,7 +69,11 @@ export function focused() {
         focused: true
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function resolved() {
@@ -69,7 +85,11 @@ export function resolved() {
         resolvedAt: Date.now()
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function saving() {
@@ -80,7 +100,11 @@ export function saving() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function saveError() {
@@ -91,7 +115,11 @@ export function saveError() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleteConfirm() {
@@ -102,7 +130,11 @@ export function deleteConfirm() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleting() {
@@ -113,7 +145,11 @@ export function deleting() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleteError() {
@@ -123,5 +159,9 @@ export function deleteError() {
         text: 'An example comment'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }

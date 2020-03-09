@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStore } from 'redux';
 
-import { Store, reducer } from '../../state';
+import { Store, reducer, Context } from '../../state';
 import { authorFromApi } from '../../state/comments';
 
 import {
@@ -25,7 +25,11 @@ export function reply() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function replyFromSomeoneElse() {
@@ -45,7 +49,11 @@ export function replyFromSomeoneElse() {
         })
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function focused() {
@@ -62,7 +70,11 @@ export function focused() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function editing() {
@@ -79,7 +91,11 @@ export function editing() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function saving() {
@@ -95,7 +111,11 @@ export function saving() {
         mode: 'saving',
         text: 'An example reply'
     });
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function saveError() {
@@ -112,7 +132,11 @@ export function saveError() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleteConfirm() {
@@ -129,7 +153,11 @@ export function deleteConfirm() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleting() {
@@ -146,7 +174,11 @@ export function deleting() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleteError() {
@@ -163,7 +195,11 @@ export function deleteError() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }
 
 export function deleted() {
@@ -180,5 +216,9 @@ export function deleted() {
         text: 'An example reply'
     });
 
-    return <RenderCommentsForStorybook store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderCommentsForStorybook/>
+        </Context.Provider>
+    );
 }

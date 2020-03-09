@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStore } from 'redux';
 
-import { Store, reducer } from '../../state';
+import { Store, reducer, Context } from '../../state';
 import { Styling } from '../../utils/storybook';
 import APIClient from '../../api';
 
@@ -9,18 +9,15 @@ import ModerationBar from './index';
 
 export default { title: 'ModerationBar' };
 
-function RenderModerationBarForStorybok({ store }: { store: Store }) {
-    let [state, setState] = React.useState(store.getState());
-    store.subscribe(() => {
-        setState(store.getState());
-    });
+function RenderModerationBarForStorybok() {
+    let {store, storeState} = React.useContext(Context);
 
     const api = new APIClient('http://wagtail.io', 'dummy-review-token');
 
     return (
         <>
             <Styling />
-            <ModerationBar store={store} api={api} {...state.moderation} />
+            <ModerationBar store={store} api={api} {...storeState.moderation} />
         </>
     );
 }
@@ -28,5 +25,9 @@ function RenderModerationBarForStorybok({ store }: { store: Store }) {
 export function moderationBar() {
     let store: Store = createStore(reducer);
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return (
+        <Context.Provider value={{store, storeState: store.getState()}}>
+            <RenderModerationBarForStorybok/>
+        </Context.Provider>
+    );
 }
