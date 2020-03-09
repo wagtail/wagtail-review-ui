@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { Styling } from '../../utils/storybook';
+import { Styling } from '../../../utils/storybook';
 
-import Checkbox from './Checkbox';
+import Checkbox from '.';
 
 export default { title: 'Checkbox' };
 
