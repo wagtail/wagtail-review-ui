@@ -69,3 +69,42 @@ export function tooLongCommentError() {
 
     return <RenderModerationBarForStorybok store={store} />;
 }
+
+export function reviewSubmitting() {
+    let store: Store = createStore(reducer);
+
+    store.dispatch(
+        updateModerationState({
+            actionBoxOpen: true,
+            submitStage: "submitting"
+        })
+    );
+
+    return <RenderModerationBarForStorybok store={store} />;
+}
+
+export function reviewSubmitError() {
+    let store: Store = createStore(reducer);
+
+    store.dispatch(
+        updateModerationState({
+            actionBoxOpen: true,
+            submitStage: "errored"
+        })
+    );
+
+    return <RenderModerationBarForStorybok store={store} />;
+}
+
+export function reviewSubmitted() {
+    let store: Store = createStore(reducer);
+
+    store.dispatch(
+        updateModerationState({
+            actionBoxOpen: true,
+            submitStage: "submitted"
+        })
+    );
+
+    return <RenderModerationBarForStorybok store={store} />;
+}
