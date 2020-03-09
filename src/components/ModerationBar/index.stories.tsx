@@ -4,8 +4,10 @@ import { createStore } from 'redux';
 import { Store, reducer } from '../../state';
 import { Styling } from '../../utils/storybook';
 import APIClient from '../../api';
+import { setErrors, updateModerationState } from '../../actions/moderation';
 
 import ModerationBar from './index';
+import { ModerationErrorCode } from '../../state/moderation';
 
 export default { title: 'ModerationBar' };
 
@@ -27,6 +29,43 @@ function RenderModerationBarForStorybok({ store }: { store: Store }) {
 
 export function moderationBar() {
     let store: Store = createStore(reducer);
+
+    return <RenderModerationBarForStorybok store={store} />;
+}
+
+export function missingValueErrors() {
+    let store: Store = createStore(reducer);
+
+    store.dispatch(
+        updateModerationState({
+            actionBoxOpen: true
+        })
+    );
+
+    const errors: Set<ModerationErrorCode> = new Set();
+    errors.add('action-required');
+    errors.add('comment-required');
+    store.dispatch(
+        setErrors(errors)
+    );
+
+    return <RenderModerationBarForStorybok store={store} />;
+}
+
+export function tooLongCommentError() {
+    let store: Store = createStore(reducer);
+
+    store.dispatch(
+        updateModerationState({
+            actionBoxOpen: true
+        })
+    );
+
+    const errors: Set<ModerationErrorCode> = new Set();
+    errors.add('comment-too-long');
+    store.dispatch(
+        setErrors(errors)
+    );
 
     return <RenderModerationBarForStorybok store={store} />;
 }
