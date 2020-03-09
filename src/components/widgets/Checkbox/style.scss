@@ -31,16 +31,15 @@
 
     label::after {
         content: '';
-        color: #000;
         display: inline-block;
-        height: 6px;
-        width: 16px;
-        border-left: 2px solid;
-        border-bottom: 2px solid;
-        transform: rotate(-45deg);
+        background-color: #333;
+        mask-image: url('./components/widgets/Checkbox/check-solid.svg');
+        mask-repeat: no-repeat;
+        width: 19px;
+        height: 100%;
         position: absolute;
         right: 4px;
-        top: 10px;
+        top: 8px;
     }
 
     input[type='checkbox'] + label::after {
