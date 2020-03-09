@@ -76,5 +76,13 @@
         padding: 16px;
         font-size: 12px;
         color: #007d7e;
+
+        &:focus {
+            @include focus-outline;
+        }
+
+        &::-moz-focus-inner {
+            border: 0;
+        }
     }
 }
