@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as FocusTrap from 'focus-trap-react';
 
 import { Store } from '../../state';
 import { ModerationState, ModerationErrorCode } from '../../state/moderation';
@@ -244,27 +243,17 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
             );
         };
 
-        const closeActionBox = () => {
-            this.props.store.dispatch(
-                updateModerationState({
-                    actionBoxOpen: false
-                })
-            );
-        };
-
         return (
-            <FocusTrap active={this.props.actionBoxOpen} focusTrapOptions={{onDeactivate: closeActionBox}}>
-                <div className="moderation-bar">
-                    {this.renderModal()}
+            <div className="moderation-bar">
+                {this.renderModal()}
 
-                    <button
-                        className="moderation-bar__button"
-                        onClick={toggleActionBox}
-                    >
-                        Submit your review
-                    </button>
-                </div>
-            </FocusTrap>
+                <button
+                    className="moderation-bar__button"
+                    onClick={toggleActionBox}
+                >
+                    Submit your review
+                </button>
+            </div>
         );
     }
 }
