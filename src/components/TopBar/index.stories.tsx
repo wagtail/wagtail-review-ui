@@ -8,13 +8,22 @@ import TopBarComponent from './index';
 
 export default { title: 'TopBar' };
 
-export function topbar() {
-    let store: Store = createStore(reducer);
+function RenderTopBarForStorybok({ store }: { store: Store }) {
+    let [state, setState] = React.useState(store.getState());
+    store.subscribe(() => {
+        setState(store.getState());
+    });
 
     return (
         <>
             <Styling />
-            <TopBarComponent store={store} />
+            <TopBarComponent store={store} {...state.settings} />
         </>
     );
+}
+
+export function topBar() {
+    let store: Store = createStore(reducer);
+
+    return <RenderTopBarForStorybok store={store} />;
 }
