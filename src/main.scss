@@ -46,6 +46,10 @@ $color-state-draft: #808080;
 $color-state-absent: #ff8f11;
 $color-state-live-draft: #43b1b0;
 
+@mixin focus-outline {
+    outline: $color-focus-outline auto 3px;
+}
+
 @mixin box {
     background-color: $background;
     padding: 20px;
@@ -56,6 +60,10 @@ $color-state-live-draft: #43b1b0;
 
     textarea {
         background-color: $textarea-background;
+    }
+
+    *:focus {
+        @include focus-outline;
     }
 }
 
@@ -75,6 +83,11 @@ $color-state-live-draft: #43b1b0;
     &--red {
         border: 1px solid #901419;
         background-color: #901419;
+    }
+
+    // Disable Firefox's focus styling becase we add our own.
+    &::-moz-focus-inner {
+        border: 0;
     }
 }
 

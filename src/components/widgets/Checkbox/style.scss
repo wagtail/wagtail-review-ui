@@ -57,6 +57,6 @@ $checkbox-check-padding: ($checkbox-size - $checkbox-check-size) / 2;
     }
 
     input[type='checkbox']:focus + label::before {
-        outline: rgb(59, 153, 252) auto 3px;
+        @include focus-outline;
     }
 }
