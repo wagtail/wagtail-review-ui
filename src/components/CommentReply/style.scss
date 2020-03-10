@@ -41,7 +41,7 @@
     &__confirm-delete &__button {
         height: 26px;
         margin-right: 5px;
-        padding: 6px;
+        padding: 2px;
         padding-bottom: 4px;
         padding-left: 9px;
         padding-right: 9px;
@@ -54,10 +54,18 @@
         color: #fff;
         font-weight: bold;
         font-size: 0.8em;
+        height: 23px;
+        line-height: 23px;;
 
         button {
             margin-left: 5px;
             margin-right: 0px;
+        }
+
+        &::after {
+            display: block;
+            content: '';
+            clear: both;
         }
     }
 
@@ -65,6 +73,8 @@
         background-color: #b4191f;
         border-radius: 3px;
         padding: 5px;
+        padding-left: 10px;
+        vertical-align: middle;
 
         button {
             float: right;
