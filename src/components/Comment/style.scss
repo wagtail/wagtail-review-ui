@@ -44,12 +44,6 @@
         @include button;
     }
 
-    &__actions,
-    &__confirm-delete,
-    &__progress {
-        height: 30px;
-    }
-
     &__actions &__button,
     &__confirm-delete &__button,
     &__reply-actions &__button {
@@ -72,8 +66,6 @@
         color: #fff;
         font-weight: bold;
         font-size: 0.8em;
-        height: 23px;
-        line-height: 23px;
 
         button {
             margin-left: 5px;
@@ -86,6 +78,8 @@
         border-radius: 3px;
         padding: 5px;
         padding-left: 10px;
+        height: 26px;
+        line-height: 26px;
         vertical-align: middle;
 
         button {

@@ -75,6 +75,8 @@ $color-state-live-draft: #43b1b0;
     cursor: pointer;
     text-transform: uppercase;
     font-family: inherit;
+    height: 26px;
+    line-height: 0;
 
     &--primary {
         border: 1px solid #007d7e;
