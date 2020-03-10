@@ -87,7 +87,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     renderAuthorDate(): React.ReactFragment {
         let { comment } = this.props;
 
-        let author = comment.author ? comment.author.name + ' -' : '';
+        let author = comment.author ? comment.author.name + ' - ' : '';
 
         return (
             <p className="comment__author-date">
