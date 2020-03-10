@@ -45,9 +45,7 @@ export function missingValueErrors() {
     const errors: Set<ModerationErrorCode> = new Set();
     errors.add('action-required');
     errors.add('comment-required');
-    store.dispatch(
-        setErrors(errors)
-    );
+    store.dispatch(setErrors(errors));
 
     return <RenderModerationBarForStorybok store={store} />;
 }
@@ -63,9 +61,7 @@ export function tooLongCommentError() {
 
     const errors: Set<ModerationErrorCode> = new Set();
     errors.add('comment-too-long');
-    store.dispatch(
-        setErrors(errors)
-    );
+    store.dispatch(setErrors(errors));
 
     return <RenderModerationBarForStorybok store={store} />;
 }
@@ -76,7 +72,7 @@ export function reviewSubmitting() {
     store.dispatch(
         updateModerationState({
             actionBoxOpen: true,
-            submitStage: "submitting"
+            submitStage: 'submitting'
         })
     );
 
@@ -89,7 +85,7 @@ export function reviewSubmitError() {
     store.dispatch(
         updateModerationState({
             actionBoxOpen: true,
-            submitStage: "errored"
+            submitStage: 'errored'
         })
     );
 
@@ -102,7 +98,7 @@ export function reviewSubmitted() {
     store.dispatch(
         updateModerationState({
             actionBoxOpen: true,
-            submitStage: "submitted"
+            submitStage: 'submitted'
         })
     );
 
