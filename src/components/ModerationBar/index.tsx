@@ -17,7 +17,7 @@ interface ModerationBarProps extends ModerationState {
 }
 
 export default class ModerationBar extends React.Component<ModerationBarProps> {
-    renderForm({submitErrored=false} = {}) {
+    renderForm({ submitErrored = false } = {}) {
         let validate = (): boolean => {
             let errors: Set<ModerationErrorCode> = new Set();
 
@@ -85,12 +85,20 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
 
         let actionErrors = <></>;
         if (this.props.errors.has('action-required')) {
-            actionErrors = <div className="moderation-bar__error">This field is required.</div>;
+            actionErrors = (
+                <div className="moderation-bar__error">
+                    This field is required.
+                </div>
+            );
         }
 
         let reasonErrors = <></>;
         if (this.props.errors.has('comment-required')) {
-            reasonErrors = <div className="moderation-bar__error">This field is required.</div>;
+            reasonErrors = (
+                <div className="moderation-bar__error">
+                    This field is required.
+                </div>
+            );
         } else if (this.props.errors.has('comment-too-long')) {
             reasonErrors = (
                 <div className="moderation-bar__error">
@@ -116,7 +124,11 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
 
         let submitError = <></>;
         if (submitErrored) {
-            submitError = <div className="moderation-bar__error">Your review failed to submit due to a server error.</div>;
+            submitError = (
+                <div className="moderation-bar__error">
+                    Your review failed to submit due to a server error.
+                </div>
+            );
         }
 
         return (
@@ -176,11 +188,8 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
     }
 
     renderSubmitting() {
-        return (
-            <h3>Submitting your Review...</h3>
-        );
+        return <h3>Submitting your Review...</h3>;
     }
-
 
     renderSubmitted() {
         const closeTab = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -194,7 +203,12 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         return (
             <>
                 <h3>Your review has been submitted!</h3>
-                <button onClick={closeTab} className="moderation-bar__modal-button moderation-bar__modal-button--primary">Close</button>
+                <button
+                    onClick={closeTab}
+                    className="moderation-bar__modal-button moderation-bar__modal-button--primary"
+                >
+                    Close
+                </button>
             </>
         );
     }
@@ -214,7 +228,7 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
                 modalContents = this.renderSubmitting();
                 break;
             case 'errored':
-                modalContents = this.renderForm({submitErrored: true});
+                modalContents = this.renderForm({ submitErrored: true });
                 break;
             case 'submitted':
                 modalContents = this.renderSubmitted();
@@ -222,10 +236,7 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         }
 
         return (
-            <div
-                className="moderation-bar__modal"
-                aria-modal="true"
-            >
+            <div className="moderation-bar__modal" aria-modal="true">
                 {modalContents}
                 <div className="moderation-bar__arrow"></div>
             </div>
