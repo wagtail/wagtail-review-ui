@@ -42,7 +42,7 @@
         &-button {
             @include button;
 
-            padding: 10px;
+            padding: 15px 10px;
             margin-top: 10px;
         }
     }
@@ -106,5 +106,6 @@
         font-weight: bold;
         margin-top: 5px;
         margin-bottom: 5px;
+        padding-left: 10px;
     }
 }
