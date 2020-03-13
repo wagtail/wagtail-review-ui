@@ -8,7 +8,7 @@ import TopBarComponent from './index';
 
 export default { title: 'TopBar' };
 
-function RenderTopBarForStorybok({ store }: { store: Store }) {
+function RenderTopBarForStorybook({ store }: { store: Store }) {
     let [state, setState] = React.useState(store.getState());
     store.subscribe(() => {
         setState(store.getState());
@@ -25,5 +25,5 @@ function RenderTopBarForStorybok({ store }: { store: Store }) {
 export function topBar() {
     let store: Store = createStore(reducer);
 
-    return <RenderTopBarForStorybok store={store} />;
+    return <RenderTopBarForStorybook store={store} />;
 }

@@ -11,7 +11,7 @@ import { ModerationErrorCode } from '../../state/moderation';
 
 export default { title: 'ModerationBar' };
 
-function RenderModerationBarForStorybok({ store }: { store: Store }) {
+function RenderModerationBarForStorybook({ store }: { store: Store }) {
     let [state, setState] = React.useState(store.getState());
     store.subscribe(() => {
         setState(store.getState());
@@ -30,7 +30,7 @@ function RenderModerationBarForStorybok({ store }: { store: Store }) {
 export function moderationBar() {
     let store: Store = createStore(reducer);
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
 
 export function missingValueErrors() {
@@ -47,7 +47,7 @@ export function missingValueErrors() {
     errors.add('comment-required');
     store.dispatch(setErrors(errors));
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
 
 export function tooLongCommentError() {
@@ -63,7 +63,7 @@ export function tooLongCommentError() {
     errors.add('comment-too-long');
     store.dispatch(setErrors(errors));
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
 
 export function reviewSubmitting() {
@@ -76,7 +76,7 @@ export function reviewSubmitting() {
         })
     );
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
 
 export function reviewSubmitError() {
@@ -89,7 +89,7 @@ export function reviewSubmitError() {
         })
     );
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
 
 export function reviewSubmitted() {
@@ -102,5 +102,5 @@ export function reviewSubmitted() {
         })
     );
 
-    return <RenderModerationBarForStorybok store={store} />;
+    return <RenderModerationBarForStorybook store={store} />;
 }
