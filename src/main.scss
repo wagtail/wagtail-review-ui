@@ -59,7 +59,23 @@ $color-state-live-draft: #43b1b0;
     color: #fff;
 
     textarea {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 15px;
+        border: none;
+        margin: 0;
+        margin-top: 5px;
+        padding: 10px;
+        width: 100%;
         background-color: $textarea-background;
+        box-sizing: border-box;
+        border-radius: 3px;
+        color: #fff;
+
+        &::placeholder {
+            font-style: italic;
+            color: #ccc;
+            opacity: 1;
+        }
     }
 
     *:focus {
