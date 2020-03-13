@@ -27,7 +27,7 @@ $checkbox-check-padding: ($checkbox-size - $checkbox-check-size) / 2;
         height: $checkbox-size;
         width: $checkbox-size;
         margin-left: 5px;
-        background-color: #fff;
+        background-color: $color-white;
         border: 1px solid #333;
         border-radius: 3px;
         position: absolute;
@@ -38,7 +38,7 @@ $checkbox-check-padding: ($checkbox-size - $checkbox-check-size) / 2;
     label::after {
         content: '';
         display: inline-block;
-        background-color: #333;
+        background-color: $color-box-background;
         mask-image: url('./components/widgets/Checkbox/check-solid.svg');
         -webkit-mask-image: url('./components/widgets/Checkbox/check-solid.svg');
         mask-repeat: no-repeat;

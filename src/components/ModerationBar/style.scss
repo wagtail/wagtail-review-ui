@@ -43,11 +43,11 @@
         width: 15px;
         height: 15px;
 
-        background-color: $background;
+        background-color: $color-box-background;
     }
 
     &__button {
-        background-color: #fff;
+        background-color: $color-white;
         text-transform: uppercase;
         border: 0;
         border-radius: 3px;
@@ -56,7 +56,7 @@
         padding: 16px;
         padding-right: 16px + 25px;
         font-size: 12px;
-        color: #007d7e;
+        color: $color-teal;
         position: relative;
         font-family: inherit;
 
@@ -70,7 +70,7 @@
 
         &::after {
             content: '';
-            background-color: #333;
+            background-color: $color-box-background;
             mask-image: url('./components/ModerationBar/wagtail.svg');
             -webkit-mask-image: url('./components/ModerationBar/wagtail.svg');
             mask-repeat: no-repeat;
@@ -84,7 +84,7 @@
     }
 
     &__error {
-        background-color: #b4191f;
+        background-color: $color-red-dark;
         border-radius: 3px;
         padding: 5px;
         font-size: 0.8em;

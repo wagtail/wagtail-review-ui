@@ -12,19 +12,19 @@
     }
 
     &__text {
-        color: #fff;
+        color: $color-white;
         font-size: 1em;
         font-weight: bold;
         margin-top: 12px;
         margin-bottom: 0px;
 
         &--mode-deleting {
-            color: #333;
+            color: $color-grey-1;
         }
     }
 
     &__author-date {
-        color: #fff;
+        color: $color-white;
         font-size: 0.8em;
         margin-top: 0px;
         margin-bottom: 12px;
@@ -32,7 +32,7 @@
 
     &--mode-deleting &__text,
     &--mode-deleting &__author-date {
-        color: #999;
+        color: $color-grey-3;
     }
 
     &__replies {
@@ -63,7 +63,7 @@
 
     &__confirm-delete,
     &__error {
-        color: #fff;
+        color: $color-white;
         font-weight: bold;
         font-size: 0.8em;
 
@@ -74,7 +74,7 @@
     }
 
     &__error {
-        background-color: #b4191f;
+        background-color: $color-red-dark;
         border-radius: 3px;
         padding: 5px;
         padding-left: 10px;
@@ -85,8 +85,8 @@
         button {
             float: right;
             margin-left: 5px;
-            background-color: #901419;
-            border-color: #901419;
+            background-color: $color-red-very-dark;
+            border-color: $color-red-very-dark;
             padding: 2px;
             padding-left: 10px;
             padding-right: 10px;
@@ -102,7 +102,7 @@
     }
 
     &__progress {
-        color: #fff;
+        color: $color-white;
         font-weight: bold;
         font-size: 0.8em;
     }
