@@ -18,23 +18,6 @@
         min-width: 370px;
         border-radius: 5px;
 
-        textarea {
-            display: block;
-            font-family: 'Open Sans', sans-serif;
-            border: none;
-            margin: 0;
-            margin-top: 5px;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 3px;
-            color: #fff;
-
-            &::placeholder {
-                font-style: italic;
-            }
-        }
-
         small {
             font-size: 80%;
         }
@@ -89,7 +72,9 @@
             content: '';
             background-color: #333;
             mask-image: url('./components/ModerationBar/wagtail.svg');
+            -webkit-mask-image: url('./components/ModerationBar/wagtail.svg');
             mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
             position: absolute;
             right: 9px;
             top: 8px;

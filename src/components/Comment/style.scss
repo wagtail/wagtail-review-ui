@@ -107,22 +107,6 @@
         font-size: 0.8em;
     }
 
-    textarea {
-        font-family: 'Open Sans', sans-serif;
-        border: none;
-        margin: 0;
-        margin-top: 5px;
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 3px;
-        color: #fff;
-
-        &::placeholder {
-            font-style: italic;
-        }
-    }
-
     &__reply-input {
         margin-top: 20px !important;
     }
