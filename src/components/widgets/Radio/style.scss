@@ -24,7 +24,7 @@ $radio-dot-size: $radio-size * 0.4;
         display: inline-block;
         height: $radio-size;
         width: $radio-size;
-        background-color: #fff;
+        background-color: $color-white;
         border: 2px solid #333;
         border-radius: 500rem;
         position: absolute;
@@ -36,7 +36,7 @@ $radio-dot-size: $radio-size * 0.4;
     label::after {
         content: '';
         display: inline-block;
-        background-color: #333;
+        background-color: $color-box-background;
         border: 0;
         border-radius: 500rem;
         width: $radio-dot-size;
