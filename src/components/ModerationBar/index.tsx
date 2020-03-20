@@ -243,8 +243,15 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         );
     }
 
-    render() {
-        let toggleActionBox = (e: React.MouseEvent<HTMLButtonElement>) => {
+    renderButton() {
+        if (
+            this.props.submitStage === 'submitted' &&
+            !this.props.actionBoxOpen
+        ) {
+            return '';
+        }
+
+        const toggleActionBox = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
 
             this.props.store.dispatch(
@@ -255,15 +262,20 @@ export default class ModerationBar extends React.Component<ModerationBarProps> {
         };
 
         return (
+            <button
+                className="moderation-bar__button"
+                onClick={toggleActionBox}
+            >
+                Submit your review
+            </button>
+        );
+    }
+
+    render() {
+        return (
             <div className="moderation-bar">
                 {this.renderModal()}
-
-                <button
-                    className="moderation-bar__button"
-                    onClick={toggleActionBox}
-                >
-                    Submit your review
-                </button>
+                {this.renderButton()}
             </div>
         );
     }
