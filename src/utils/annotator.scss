@@ -1,3 +1,30 @@
+$color-teal: #007d7e;
+$color-teal-darker: darken(adjust-hue($color-teal, 1), 4);
+$color-teal-dark: darken(adjust-hue($color-teal, 1), 7);
+
+$color-blue: #71b2d4;
+$color-red: #cd3238;
+$color-red-dark: #b4191f;
+$color-red-very-dark: #901419;
+$color-orange: #e9b04d;
+$color-orange-dark: #bb5b03;
+$color-green: #189370;
+$color-green-dark: #157b57;
+$color-salmon: #f37e77;
+$color-salmon-light: #fcf2f2;
+$color-white: #fff;
+$color-black: #000;
+
+// darker to lighter
+$color-grey-1: darken($color-white, 80);
+$color-grey-2: darken($color-white, 70);
+$color-grey-25: #626262;
+$color-grey-3: darken($color-white, 15);
+$color-grey-4: darken($color-white, 10);
+$color-grey-5: darken($color-white, 2);
+
+$color-box-background: $color-grey-1;
+
 .annotator-filter *,
 .annotator-notice,
 .annotator-widget * {
